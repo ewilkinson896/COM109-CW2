@@ -2,6 +2,6 @@
 
 Coursework repo for COM109 Client Side Develpoment.
 
-# Nicholson & Co. Coffee
+  # York Street Coffee
 
 Our theme will be a cafe.
