@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Subscription Box</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="information.html">Information</a>
+        <a href="form.html">Form</a>
+        <a href="cart.html">Cart</a>
+        <a href="subscription.html">Subscription</a>
+    </nav>
+
+    <main class="subscription-page">
+        <h1>Build Your Subscription Box</h1>
+
+        <form id="subscriptionForm">
+            <label for="customerName">Name</label>
+            <input type="text" id="customerName" name="customerName">
+
+            <label for="customerEmail">Email</label>
+            <input type="email" id="customerEmail" name="customerEmail">
+
+            <label for="coffee">Coffee</label>
+            <select id="coffee" name="coffee">
+                <option value="House Blend">House Blend</option>
+                <option value="Colombian Roast">Colombian Roast</option>
+                <option value="Espresso Mix">Espresso Mix</option>
+            </select>
+
+            <label for="roast">Roast</label>
+            <select id="roast" name="roast">
+                <option value="Light">Light</option>
+                <option value="Medium">Medium</option>
+                <option value="Dark">Dark</option>
+            </select>
+
+            <label for="grind">Grind Type</label>
+            <select id="grind" name="grind">
+                <option value="Beans">Beans</option>
+                <option value="Coarse">Coarse</option>
+                <option value="Fine">Fine</option>
+            </select>
+
+            <p>Bakery Add-ons</p>
+            <label><input type="checkbox" class="addon" value="Croissant"> Croissant</label>
+            <label><input type="checkbox" class="addon" value="Brownie"> Brownie</label>
+            <label><input type="checkbox" class="addon" value="Cookie"> Cookie</label>
+
+            <label for="frequency">Delivery Frequency</label>
+            <select id="frequency" name="frequency">
+                <option value="Weekly">Weekly</option>
+                <option value="Fortnightly">Fortnightly</option>
+                <option value="Monthly">Monthly</option>
+            </select>
+
+            <label><input type="checkbox" id="gift" name="gift"> This is a gift</label>
+
+            <button type="submit">Save Subscription</button>
+        </form>
+
+        <div id="formMessage"></div>
+
+        <section class="summary-box">
+            <h2>Order Summary</h2>
+            <p id="summaryCoffee">Coffee: House Blend</p>
+            <p id="summaryRoast">Roast: Light</p>
+            <p id="summaryGrind">Grind: Beans</p>
+            <p id="summaryAddons">Add-ons: None</p>
+            <p id="summaryFrequency">Delivery: Weekly</p>
+            <p id="summaryGift">Gift: No</p>
+            <p id="summaryPrice">Price: £10</p>
+        </section>
+    </main>
+
+    <script src="../scripts/subscription.js"></script>
+</body>
+
+</html>

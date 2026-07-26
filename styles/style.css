@@ -32,3 +32,27 @@
 
 
 /* Responsive Design */
+
+.subscription-page {
+	max-width: 700px;
+	margin: 20px auto;
+	padding: 20px;
+}
+
+#subscriptionForm {
+	display: grid;
+	gap: 10px;
+}
+
+#subscriptionForm input,
+#subscriptionForm select,
+#subscriptionForm button {
+	padding: 8px;
+}
+
+.summary-box,
+#formMessage {
+	margin-top: 20px;
+	padding: 12px;
+	border: 1px solid #ccc;
+}
