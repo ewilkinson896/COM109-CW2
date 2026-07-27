@@ -25,26 +25,9 @@
             <label for="customerEmail">Email</label>
             <input type="email" id="customerEmail" name="customerEmail">
 
-            <label for="coffee">Coffee</label>
-            <select id="coffee" name="coffee">
-                <option value="House Blend">House Blend</option>
-                <option value="Colombian Roast">Colombian Roast</option>
-                <option value="Espresso Mix">Espresso Mix</option>
-            </select>
-
-            <label for="roast">Roast</label>
-            <select id="roast" name="roast">
-                <option value="Light">Light</option>
-                <option value="Medium">Medium</option>
-                <option value="Dark">Dark</option>
-            </select>
-
-            <label for="grind">Grind Type</label>
-            <select id="grind" name="grind">
-                <option value="Beans">Beans</option>
-                <option value="Coarse">Coarse</option>
-                <option value="Fine">Fine</option>
-            </select>
+            <label>Coffee Details</label>
+            <button type="button" id="addCoffeeButton">Add Coffee</button>
+            <div id="coffeeList"></div>
 
             <p>Bakery Add-ons</p>
             <label><input type="checkbox" class="addon" value="Croissant"> Croissant</label>
@@ -67,13 +50,11 @@
 
         <section class="summary-box">
             <h2>Order Summary</h2>
-            <p id="summaryCoffee">Coffee: House Blend</p>
-            <p id="summaryRoast">Roast: Light</p>
-            <p id="summaryGrind">Grind: Beans</p>
+            <p id="summaryCoffee">Coffees: 0 selected</p>
             <p id="summaryAddons">Add-ons: None</p>
             <p id="summaryFrequency">Delivery: Weekly</p>
             <p id="summaryGift">Gift: No</p>
-            <p id="summaryPrice">Price: £10</p>
+            <p id="summaryPrice">Price: £0</p>
         </section>
     </main>
 
