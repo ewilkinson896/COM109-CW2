@@ -1,4 +1,5 @@
 // Javascript for product page
+
 const products = [
     {
         id: 1,
@@ -6,6 +7,7 @@ const products = [
         category: "coffee",
         price: 8.50,
         description: "Smooth, balanced beans roasted for everyday drinking.",
+        image: "../images/latte.jpg"
     },
     {
         id: 2,
@@ -13,6 +15,7 @@ const products = [
         category: "coffee",
         price: 9.20,
         description: "Bright, fruity single-origin beans from Colombia.",
+        image: "../images/latte.jpg"
     },
     {
         id: 3,
@@ -20,6 +23,7 @@ const products = [
         category: "coffee",
         price: 9.80,
         description: "Dark, bold beans made for rich espresso shots.",
+        image: "../images/latte.jpg"
     },
     {
         id: 4,
@@ -27,6 +31,7 @@ const products = [
         category: "bakery",
         price: 3.20,
         description: "Flaky, buttery pastry baked fresh every morning.",
+        image: "../images/croissant.jpg"
     },
     {
         id: 5,
@@ -34,6 +39,7 @@ const products = [
         category: "bakery",
         price: 4.50,
         description: "Rich chocolate sponge with smooth ganache icing.",
+        image: "../images/chocolatecake.jpg"
     },
     {
         id: 6,
@@ -41,6 +47,7 @@ const products = [
         category: "bakery",
         price: 3.80,
         description: "Soft, spiced bun swirled with cinnamon sugar.",
+        image: "../images/croissant.jpg"
     }
 ];
 
@@ -69,10 +76,12 @@ function createProductCard(product) {
     card.dataset.id = product.id;
 
     card.innerHTML =
-        '<div class="product-image" aria-hidden="true">' + product.image + '</div>' +
-        '<h3 class="product-name">' + product.name + '</h3>' +
-        '<p class="product-price">£' + product.price.toFixed(2) + '</p>' +
-        '<p class="product-description">' + product.description + '</p>';
+        '<img class="product-image" src="' + product.image + '" alt="' + product.name + '">' +
+        '<div class="product-card-body">' +
+            '<h3 class="product-name">' + product.name + '</h3>' +
+            '<p class="product-price">£' + product.price.toFixed(2) + '</p>' +
+            '<p class="product-description">' + product.description + '</p>' +
+        '</div>';
 
     return card;
 }

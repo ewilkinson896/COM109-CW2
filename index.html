@@ -9,30 +9,24 @@
 
 <body>
 
-<header>
-    <nav>
-    <a href="index.html">Home</a>
-    <a href="pages/product.html">Products</a>
-    <a href="pages/information.html"></a>
-    <a>/form.htmlForm</a>
-    pages/cart.htmlCart</a>
-    pages/subscription.htmlSubscription</a>
+<nav>
+    <span class="brand">York Street Coffee</span>
+    <div class="nav-links">
+        <a href="index.html" class="current">Home</a>
+        <a href="pages/product.html">Products</a>
+        <a href="pages/information.html">Information</a>
+        <a href="pages/cart.html">Cart</a>
+        <a href="pages/subscription.html">Subscription</a>
+    </div>
 </nav>
-
-</header>
 
     <main>
 
         <section class="hero">
             <h1>Welcome to York Street Coffee</h1>
             <p>Freshly brewed coffee and artisan bakery treats every day.</p>
-
-            pages/information.htmlExplore Our Menu</a>
-
-            <br><br>
-
-            images/coffee.jpg
-            images/bakery.jpg
+            <p id="shopStatus"></p>
+            <a href="pages/product.html" class="button">Explore Our Menu</a>
         </section>
 
         <section>
@@ -46,14 +40,25 @@
         <section>
             <h2>Featured Products</h2>
 
-            <h3>Signature Latte</h3>
-            <p>Rich espresso with perfectly steamed milk.</p>
+            <div class="featured-grid">
+                <div class="featured-item">
+                    <img src="images/latte.jpg" alt="Signature latte with steamed milk">
+                    <h3>Signature Latte</h3>
+                    <p>Rich espresso with perfectly steamed milk.</p>
+                </div>
 
-            <h3>Butter Croissant</h3>
-            <p>Freshly baked every morning.</p>
+                <div class="featured-item">
+                    <img src="images/croissant.jpg" alt="Freshly baked butter croissant">
+                    <h3>Butter Croissant</h3>
+                    <p>Freshly baked every morning.</p>
+                </div>
 
-            <h3>Chocolate Cake</h3>
-            <p>A customer favourite.</p>
+                <div class="featured-item">
+                    <img src="images/chocolatecake.jpg" alt="Slice of chocolate cake">
+                    <h3>Chocolate Cake</h3>
+                    <p>A customer favourite.</p>
+                </div>
+            </div>
         </section>
 
         <section>
@@ -73,6 +78,22 @@
     <footer>
         <p>&copy; 2026 York Street Coffee</p>
     </footer>
+
+    <button id="topBtn" type="button" aria-label="Scroll to top">↑</button>
+
+    <script>
+        var currentHour = new Date().getHours();
+
+        if (currentHour >= 7 && currentHour < 18) {
+            document.getElementById("shopStatus").textContent = "We are currently OPEN";
+        } else {
+            document.getElementById("shopStatus").textContent = "We are currently CLOSED";
+        }
+
+        document.getElementById("topBtn").addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
 
 </body>
 </html>

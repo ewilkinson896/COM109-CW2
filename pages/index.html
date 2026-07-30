@@ -2,126 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>York Street Coffee</title>
-    ../styles/style.css
+    <!-- This file is not the site's home page. It exists only because two
+         copies of the home page were created by mistake, which has caused
+         the real home page (../index.html) to fall out of sync with it
+         more than once. Edit ../index.html instead - this page just
+         redirects there. -->
+    <meta http-equiv="refresh" content="0; url=../index.html">
+    <title>Redirecting... || York Street Coffee</title>
 </head>
-
 <body>
-
-<header>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="information.html">Information</a>
-        <a href="form.html">Form</a>
-        <a href="cart.html">Cart</a>
-        product.htmlProducts</a>
-        <a href="subscription.html">Subscription</a>
-        <a href="coffee-details.html">Coffee Details</a>
-    </nav>
-</header>
-
-<main>
-
-    <section class="hero">
-    <h1>Welcome to York Street Coffee</h1>
-
-    <p>Freshly brewed coffee and artisan bakery treats every day.</p>
-
-    <p id="shopStatus"></p>
-
-    <a href="product.html" class="button">View Products</a>
-</section>
-
-<section>
-    <h2>Our Story</h2>
-
-    <p>
-        York Street Coffee is an independent coffee shop located in Belfast,
-        serving premium coffee, freshly baked pastries and delicious treats.
-    </p>
-
-    <br>
-
-    <p>
-        Located beside Ulster University Belfast, we are a popular destination
-        for students, staff and visitors looking for a relaxing environment to
-        study, meet friends or enjoy a coffee.
-    </p>
-
-    <br>
-
-    <p>
-        We are committed to providing excellent customer service and high-quality
-        products in a warm and welcoming atmosphere.
-    </p>
-</section>
-
-    <section>
-        <h2>Featured Products</h2>
-
-        <div class="products">
-
-            <div class="product">
-                ../images/latte.jpg
-                <h3>Signature Latte</h3>
-                <p>Rich espresso with steamed milk.</p>
-            </div>
-
-            <div class="product">
-                ../images/croissant.jpg
-                <h3>Butter Croissant</h3>
-                <p>Freshly baked every morning.</p>
-            </div>
-
-            <div class="product">
-                ../images/chocolatecake.jpg
-                <h3>Chocolate Cake</h3>
-                <p>A customer favourite.</p>
-            </div>
-
-        </div>
-    </section>
-
-    <section>
-        <h2>Opening Hours</h2>
-
-        <ul>
-            <li>Monday-Friday: 7am-6pm</li>
-            <li>Saturday: 8am-5pm</li>
-            <li>Sunday: 9am-4pm</li>
-        </ul>
-
-        <h3>Location</h3>
-        <p>York Street, Belfast</p>
-    </section>
-
-</main>
-
-<footer>
-    <p>&copy; 2026 York Street Coffee</p>
-</footer>
-
-<button id="topBtn">↑</button>
-
-<script>
-const currentHour = new Date().getHours();
-
-if (currentHour >= 7 && currentHour < 18) {
-    document.getElementById("shopStatus").textContent =
-        "We are currently OPEN";
-} else {
-    document.getElementById("shopStatus").textContent =
-        "We are currently CLOSED";
-}
-
-document.getElementById("topBtn").addEventListener("click", function() {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-});
-</script>
-
+    <p>Redirecting to the <a href="../index.html">York Street Coffee home page</a>.</p>
 </body>
 </html>
