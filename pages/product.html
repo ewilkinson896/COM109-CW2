@@ -1,9 +1,49 @@
-Joshua Nicholson Contribution
-<html>
-    <body>
-        <section>
-<title>York Street Bakery || Est 2026.</title>
-    <h1>Small-batch beans and same day bakes! <br>Browse our catalogue of treats here...</h1>
-</section>
+<!--Joshua Nicholson Contribution-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Speciality || York Street Bakery</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="product.html">Products</a>
+        <a href="form.html">Form</a>
+        <a href="cart.html">Cart</a>
+        <a href="subscription.html">Subscription</a>
+    </nav>
+
+    <main class="product-page">
+        <section class="product-intro">
+            <h1>Small-batch beans and same day bakes!</h1>
+            <p>Browse our catalogue of treats here!</p>
+        </section>
+
+        <section class="product-controls">
+            <div class="filter-buttons" role="group" aria-label="Filter products by category">
+                <button type="button" class="filter-button active" data-filter="all">All</button>
+                <button type="button" class="filter-button" data-filter="coffee">Coffee</button>
+                <button type="button" class="filter-button" data-filter="bakery">Bakery</button>
+            </div>
+
+            <div class="search-bar">
+                <label for="productSearch" class="visually-hidden">Search products</label>
+                <input type="search" id="productSearch" placeholder="Search products...">
+            </div>
+        </section>
+
+        <section id="productGrid" class="product-grid">
+            <!-- Product cards are rendered here by product.js -->
+        </section>
+
+        <p id="noResultsMessage" class="no-results" hidden>No products match your search.</p>
+    </main>
+
+    <script src="../scripts/product.js"></script>
 </body>
+
 </html>
