@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>York Street Coffee</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="../styles/style.css">
 </head>
 
 <body>
@@ -12,48 +12,73 @@
 <header>
     <nav>
     <a href="index.html">Home</a>
-    <a href="pages/information.html"></a>
-    <a>/form.htmlForm</a>
-    pages/cart.htmlCart</a>
-    pages/subscription.htmlSubscription</a>
+    <a href="information.html">Information</a>
+    <a href="form.html">Form</a>
+    <a href="cart.html">Cart</a>
+    <a href="subscription.html">Subscription</a>
+    <a href="coffee-details.html">Coffee Details</a>
 </nav>
 
 </header>
 
     <main>
 
-        <section class="hero">
-            <h1>Welcome to York Street Coffee</h1>
-            <p>Freshly brewed coffee and artisan bakery treats every day.</p>
+       <section class="hero">
+    <h1>Welcome to York Street Coffee</h1>
 
-            pages/information.htmlExplore Our Menu</a>
+    <p>Freshly brewed coffee and artisan bakery treats every day.</p>
 
-            <br><br>
+    <p id="shopStatus"></p>
 
-            images/coffee.jpg
-            images/bakery.jpg
-        </section>
+    <a href="information.html" class="button">Explore Our Menu</a>
+</section>
 
         <section>
             <h2>Our Story</h2>
-            <p>
-                York Street Coffee is a Belfast coffee shop serving quality coffee,
-                fresh bakery products and a welcoming atmosphere.
-            </p>
+              <p>
+    York Street Coffee is an independent coffee shop located in the heart of Belfast,
+    serving premium coffee, freshly baked pastries and a range of delicious homemade treats.
+    Our goal is to create a warm and welcoming environment where customers can relax and enjoy
+    high-quality food and drink.
+
+    <br><br>
+
+    Conveniently situated close to Ulster University's Belfast campus, York Street Coffee is a
+    popular destination for students, university staff and visitors. Whether you're looking for a
+    quiet place to study, meet friends or take a break between lectures, our café offers the
+    perfect setting.
+
+    <br><br>
+
+    From expertly crafted espresso-based drinks to freshly prepared bakery products, we take pride
+    in delivering excellent customer service and a memorable café experience. Whether you are
+    stopping by for your morning coffee or enjoying an afternoon treat, we look forward to
+    welcoming you.
+</p>
         </section>
 
         <section>
-            <h2>Featured Products</h2>
+    <h2>Featured Products</h2>
 
-            <h3>Signature Latte</h3>
+    <div class="products">
+
+        <div class="product">
+            <h3>☕ Signature Latte</h3>
             <p>Rich espresso with perfectly steamed milk.</p>
+        </div>
 
-            <h3>Butter Croissant</h3>
+        <div class="product">
+            <h3>🥐 Butter Croissant</h3>
             <p>Freshly baked every morning.</p>
+        </div>
 
-            <h3>Chocolate Cake</h3>
+        <div class="product">
+            <h3>🍰 Chocolate Cake</h3>
             <p>A customer favourite.</p>
-        </section>
+        </div>
+
+    </div>
+</section>
 
         <section>
             <h2>Opening Hours</h2>
@@ -73,5 +98,26 @@
         <p>&copy; 2026 York Street Coffee</p>
     </footer>
 
+<button id="topBtn">↑</button>
+
+<script>
+const currentHour = new Date().getHours();
+
+if (currentHour >= 7 && currentHour < 18) {
+    document.getElementById("shopStatus").textContent =
+        "🟢 We are currently OPEN";
+}
+else {
+    document.getElementById("shopStatus").textContent =
+        "🔴 We are currently CLOSED";
+}
+
+document.getElementById("topBtn").addEventListener("click", function () {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});
+</script>
 </body>
 </html>

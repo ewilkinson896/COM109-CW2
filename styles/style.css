@@ -1,92 +1,332 @@
 /* Global Styles */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
 
 /* Body */
 
-
-/* Background Image */
-
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f4ef;
+    color: #333;
+    line-height: 1.6;
+}
 
 /* Header */
 
+header {
+    background-color: #4b2e2e;
+    padding: 15px 20px;
+}
 
 /* Navigation */
 
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+nav a:hover {
+    color: #d9a066;
+}
 
 /* Main Content */
 
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Hero Section */
+
+.hero {
+    text-align: center;
+    padding: 90px 20px;
+    background-color: #6f4e37;
+    color: white;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+
+.button,
+.simple-button,
+button {
+    display: inline-block;
+    background-color: #d9a066;
+    color: white;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.button:hover,
+.simple-button:hover,
+button:hover {
+    background-color: #b8864d;
+}
+
+/* Sections */
+
+section {
+    padding: 40px 20px;
+}
+
+section h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #4b2e2e;
+}
+
+section h3 {
+    margin-top: 20px;
+    color: #6f4e37;
+}
+
+/* Featured Products */
+
+.products {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.product {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1;
+    min-width: 220px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.product:hover {
+    transform: translateY(-5px);
+}
+
+/* Opening Hours */
+
+ul {
+    margin-left: 25px;
+    margin-top: 10px;
+}
+
+li {
+    margin-bottom: 8px;
+}
 
 /* Information Page */
 
+.information-page {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+}
 
 /* Form Styling */
 
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold;
+}
+
+input,
+select,
+textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+}
 
 /* Validation Messages */
 
+#formMessage,
+#coffeeMessage,
+.summary-box {
+    margin-top: 20px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 8px;
+}
 
-/* Animations */
-
-
-/* Accessibility Enhancements */
-
-
-/* Responsive Design */
+/* Subscription Page */
 
 .subscription-page {
-	max-width: 700px;
-	margin: 20px auto;
-	padding: 20px;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
 }
 
 #subscriptionForm {
-	display: grid;
-	gap: 10px;
+    display: grid;
+    gap: 10px;
 }
 
 #subscriptionForm input,
 #subscriptionForm select,
 #subscriptionForm button {
-	padding: 8px;
+    padding: 10px;
 }
 
+/* Coffee Details Page */
+
 #coffeeDetailsForm {
-	display: grid;
-	gap: 10px;
+    display: grid;
+    gap: 10px;
 }
 
 #coffeeDetailsForm input,
 #coffeeDetailsForm select,
 #coffeeDetailsForm button {
-	padding: 8px;
-}
-
-.simple-button {
-	display: inline-block;
-	padding: 8px;
-	border: 1px solid #ccc;
-	text-decoration: none;
-	color: #000;
+    padding: 10px;
 }
 
 #coffeeList {
-	display: grid;
-	gap: 10px;
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .coffee-box {
-	padding: 10px;
-	border: 1px solid #ccc;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 8px;
 }
 
 .delete-coffee-button {
-	padding: 6px 8px;
+    padding: 8px 10px;
+    background-color: #b94a48;
 }
 
-.summary-box,
-#formMessage,
-#coffeeMessage {
-	margin-top: 20px;
-	padding: 12px;
-	border: 1px solid #ccc;
+.delete-coffee-button:hover {
+    background-color: #8a2f2d;
 }
+
+/* JavaScript Status Text */
+
+#shopStatus {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+/* Back To Top Button */
+
+#topBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4b2e2e;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+#topBtn:hover {
+    background-color: #6f4e37;
+}
+
+/* Footer */
+
+footer {
+    background-color: #4b2e2e;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+/* Animations */
+
+.product,
+.button,
+.simple-button,
+button,
+nav a {
+    transition: all 0.3s ease;
+}
+
+/* Accessibility Enhancements */
+
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 3px solid #d9a066;
+    outline-offset: 2px;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero {
+        padding: 60px 15px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .hero p {
+        font-size: 18px;
+    }
+
+    .products {
+        flex-direction: column;
+    }
+
+    section h2 {
+        font-size: 26px;
+    }
+
+}
+
