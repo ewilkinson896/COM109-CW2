@@ -4,99 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>York Street Coffee</title>
-    <link rel="stylesheet" href="../styles/style.css">
+    ../styles/style.css
 </head>
 
 <body>
 
 <header>
     <nav>
-    <a href="index.html">Home</a>
-    <a href="information.html">Information</a>
-    <a href="form.html">Form</a>
-    <a href="cart.html">Cart</a>
-    <a href="subscription.html">Subscription</a>
-    <a href="coffee-details.html">Coffee Details</a>
-</nav>
-
+        <a href="index.html">Home</a>
+        <a href="information.html">Information</a>
+        <a href="form.html">Form</a>
+        <a href="cart.html">Cart</a>
+        product.htmlProducts</a>
+        <a href="subscription.html">Subscription</a>
+        <a href="coffee-details.html">Coffee Details</a>
+    </nav>
 </header>
 
-    <main>
+<main>
 
-       <section class="hero">
+    <section class="hero">
     <h1>Welcome to York Street Coffee</h1>
 
     <p>Freshly brewed coffee and artisan bakery treats every day.</p>
 
     <p id="shopStatus"></p>
 
-    <a href="information.html" class="button">Explore Our Menu</a>
+    <a href="product.html" class="button">View Products</a>
 </section>
 
-        <section>
-            <h2>Our Story</h2>
-              <p>
-    York Street Coffee is an independent coffee shop located in the heart of Belfast,
-    serving premium coffee, freshly baked pastries and a range of delicious homemade treats.
-    Our goal is to create a warm and welcoming environment where customers can relax and enjoy
-    high-quality food and drink.
+<section>
+    <h2>Our Story</h2>
 
-    <br><br>
+    <p>
+        York Street Coffee is an independent coffee shop located in Belfast,
+        serving premium coffee, freshly baked pastries and delicious treats.
+    </p>
 
-    Conveniently situated close to Ulster University's Belfast campus, York Street Coffee is a
-    popular destination for students, university staff and visitors. Whether you're looking for a
-    quiet place to study, meet friends or take a break between lectures, our café offers the
-    perfect setting.
+    <br>
 
-    <br><br>
+    <p>
+        Located beside Ulster University Belfast, we are a popular destination
+        for students, staff and visitors looking for a relaxing environment to
+        study, meet friends or enjoy a coffee.
+    </p>
 
-    From expertly crafted espresso-based drinks to freshly prepared bakery products, we take pride
-    in delivering excellent customer service and a memorable café experience. Whether you are
-    stopping by for your morning coffee or enjoying an afternoon treat, we look forward to
-    welcoming you.
-</p>
-        </section>
+    <br>
 
-        <section>
-    <h2>Featured Products</h2>
-
-    <div class="products">
-
-        <div class="product">
-            <h3>☕ Signature Latte</h3>
-            <p>Rich espresso with perfectly steamed milk.</p>
-        </div>
-
-        <div class="product">
-            <h3>🥐 Butter Croissant</h3>
-            <p>Freshly baked every morning.</p>
-        </div>
-
-        <div class="product">
-            <h3>🍰 Chocolate Cake</h3>
-            <p>A customer favourite.</p>
-        </div>
-
-    </div>
+    <p>
+        We are committed to providing excellent customer service and high-quality
+        products in a warm and welcoming atmosphere.
+    </p>
 </section>
 
-        <section>
-            <h2>Opening Hours</h2>
-            <ul>
-                <li>Monday - Friday: 7am - 6pm</li>
-                <li>Saturday: 8am - 5pm</li>
-                <li>Sunday: 9am - 4pm</li>
-            </ul>
+    <section>
+        <h2>Featured Products</h2>
 
-            <h3>Location</h3>
-            <p>York Street, Belfast</p>
-        </section>
+        <div class="products">
 
-    </main>
+            <div class="product">
+                ../images/latte.jpg
+                <h3>Signature Latte</h3>
+                <p>Rich espresso with steamed milk.</p>
+            </div>
 
-    <footer>
-        <p>&copy; 2026 York Street Coffee</p>
-    </footer>
+            <div class="product">
+                ../images/croissant.jpg
+                <h3>Butter Croissant</h3>
+                <p>Freshly baked every morning.</p>
+            </div>
+
+            <div class="product">
+                ../images/chocolatecake.jpg
+                <h3>Chocolate Cake</h3>
+                <p>A customer favourite.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <h2>Opening Hours</h2>
+
+        <ul>
+            <li>Monday-Friday: 7am-6pm</li>
+            <li>Saturday: 8am-5pm</li>
+            <li>Sunday: 9am-4pm</li>
+        </ul>
+
+        <h3>Location</h3>
+        <p>York Street, Belfast</p>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 York Street Coffee</p>
+</footer>
 
 <button id="topBtn">↑</button>
 
@@ -105,19 +109,19 @@ const currentHour = new Date().getHours();
 
 if (currentHour >= 7 && currentHour < 18) {
     document.getElementById("shopStatus").textContent =
-        "🟢 We are currently OPEN";
-}
-else {
+        "We are currently OPEN";
+} else {
     document.getElementById("shopStatus").textContent =
-        "🔴 We are currently CLOSED";
+        "We are currently CLOSED";
 }
 
-document.getElementById("topBtn").addEventListener("click", function () {
+document.getElementById("topBtn").addEventListener("click", function() {
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
 });
 </script>
+
 </body>
 </html>
