@@ -81,19 +81,7 @@
 
     <button id="topBtn" type="button" aria-label="Scroll to top">↑</button>
 
-    <script>
-        var currentHour = new Date().getHours();
-
-        if (currentHour >= 7 && currentHour < 18) {
-            document.getElementById("shopStatus").textContent = "We are currently OPEN";
-        } else {
-            document.getElementById("shopStatus").textContent = "We are currently CLOSED";
-        }
-
-        document.getElementById("topBtn").addEventListener("click", function () {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-    </script>
+    <script src="scripts/index.js"></script>
 
 </body>
 </html>

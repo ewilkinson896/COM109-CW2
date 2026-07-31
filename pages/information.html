@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Information | York Street Coffee</title>
-    ../styles/style.css
+    <link rel="stylesheet" href="../styles/style.css">
 </head>
 
 <body>
@@ -12,7 +12,7 @@
 <nav>
     <span class="brand">York Street Coffee</span>
     <div class="nav-links">
-        ../index.htmlHome</a>
+        <a href="../index.html">Home</a>
         <a href="product.html">Products</a>
         <a href="information.html" class="current">Information</a>
         <a href="cart.html">Cart</a>
@@ -35,7 +35,7 @@
 
         <div class="featured-grid">
             <div class="featured-item">
-                <img src="../images/cafe.jpg" alt="Inside York Street Coffee">
+                <img src="../images/latte.jpg" alt="Inside York Street Coffee">
                 <h3>Our Café</h3>
                 <p>A welcoming space for students, professionals and visitors.</p>
             </div>
@@ -52,11 +52,11 @@
     <section>
         <h2>Our Mission</h2>
 
-        <p>
+        <blockquote class="mission-callout">
             Our mission is simple: to serve excellent coffee and create a friendly
             atmosphere where everyone feels welcome. We focus on quality ingredients,
             great customer service and supporting our local community.
-        </p>
+        </blockquote>
     </section>
 
     <section>
@@ -65,16 +65,19 @@
         <div class="featured-grid">
 
             <div class="featured-item">
+                <span class="info-icon" aria-hidden="true">☕</span>
                 <h3>Quality Coffee</h3>
                 <p>Freshly brewed coffee prepared throughout the day.</p>
             </div>
 
             <div class="featured-item">
+                <span class="info-icon" aria-hidden="true">🥐</span>
                 <h3>Fresh Bakery</h3>
                 <p>Delicious pastries and sweet treats baked daily.</p>
             </div>
 
             <div class="featured-item">
+                <span class="info-icon" aria-hidden="true">📍</span>
                 <h3>Great Location</h3>
                 <p>Conveniently located near Ulster University Belfast.</p>
             </div>
@@ -96,18 +99,24 @@
     <section>
         <h2>Location & Contact</h2>
 
-        <p>
-            <strong>York Street Coffee</strong><br>
-            York Street<br>
-            Belfast
-        </p>
+        <div class="contact-card">
+            <div>
+                <h4>Address</h4>
+                <p>
+                    York Street Coffee<br>
+                    York Street<br>
+                    Belfast
+                </p>
+            </div>
 
-        <br>
-
-        <p>
-            Phone: 028 1234 5678<br>
-            Email: info@yorkstreetcoffee.com
-        </p>
+            <div>
+                <h4>Get in Touch</h4>
+                <p>
+                    Phone: 028 1234 5678<br>
+                    Email: info@yorkstreetcoffee.com
+                </p>
+            </div>
+        </div>
     </section>
 
 </main>
@@ -118,11 +127,7 @@
 
 <button id="topBtn" type="button" aria-label="Scroll to top">↑</button>
 
-<script>
-document.getElementById("topBtn").addEventListener("click", function () {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-});
-</script>
+<script src="../scripts/information.js"></script>
 
 </body>
 </html>

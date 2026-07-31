@@ -1,13 +1,5 @@
-// Wait for page to load
+// Javascript for information page
 
-
-// Image map click events
-
-
-// Show information section
-
-
-// Animation effects
-
-
-// Additional interactions
+document.getElementById("topBtn").addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
