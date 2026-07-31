@@ -1,38 +1,128 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Information Page</title>
-
-    <!-- Favicon -->
-
-    <!-- CSS Link -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information | York Street Coffee</title>
+    ../styles/style.css
 </head>
 
 <body>
 
-    <!-- Header -->
+<nav>
+    <span class="brand">York Street Coffee</span>
+    <div class="nav-links">
+        ../index.htmlHome</a>
+        <a href="product.html">Products</a>
+        <a href="information.html" class="current">Information</a>
+        <a href="cart.html">Cart</a>
+        <a href="subscription.html">Subscription</a>
+    </div>
+</nav>
 
-    <!-- Navigation -->
+<main>
 
-    <!-- Main Content -->
+    <section class="hero">
+        <h1>About York Street Coffee</h1>
+        <p>
+            Learn more about our café, our products and our commitment
+            to serving the Belfast community.
+        </p>
+    </section>
 
-        <!-- Image Map -->
+    <section>
+        <h2>Who We Are</h2>
 
-        <!-- Hidden Information Section -->
+        <div class="featured-grid">
+            <div class="featured-item">
+                <img src="../images/cafe.jpg" alt="Inside York Street Coffee">
+                <h3>Our Café</h3>
+                <p>A welcoming space for students, professionals and visitors.</p>
+            </div>
+        </div>
 
-            <!-- Information Box 1 -->
+        <p>
+            York Street Coffee is an independent coffee shop located in Belfast,
+            close to Ulster University. We are passionate about serving high-quality
+            coffee, fresh bakery goods and providing a comfortable environment for
+            studying, meeting friends or enjoying a quiet break.
+        </p>
+    </section>
 
-            <!-- Information Box 2 -->
+    <section>
+        <h2>Our Mission</h2>
 
-            <!-- Information Box 3 -->
+        <p>
+            Our mission is simple: to serve excellent coffee and create a friendly
+            atmosphere where everyone feels welcome. We focus on quality ingredients,
+            great customer service and supporting our local community.
+        </p>
+    </section>
 
-            <!-- Information Box 4 -->
+    <section>
+        <h2>Why Choose Us?</h2>
 
-    <!-- jQuery -->
+        <div class="featured-grid">
 
-    <!-- JavaScript -->
+            <div class="featured-item">
+                <h3>Quality Coffee</h3>
+                <p>Freshly brewed coffee prepared throughout the day.</p>
+            </div>
+
+            <div class="featured-item">
+                <h3>Fresh Bakery</h3>
+                <p>Delicious pastries and sweet treats baked daily.</p>
+            </div>
+
+            <div class="featured-item">
+                <h3>Great Location</h3>
+                <p>Conveniently located near Ulster University Belfast.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section>
+        <h2>Opening Hours</h2>
+
+        <ul>
+            <li>Monday - Friday: 7am - 6pm</li>
+            <li>Saturday: 8am - 5pm</li>
+            <li>Sunday: 9am - 4pm</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Location & Contact</h2>
+
+        <p>
+            <strong>York Street Coffee</strong><br>
+            York Street<br>
+            Belfast
+        </p>
+
+        <br>
+
+        <p>
+            Phone: 028 1234 5678<br>
+            Email: info@yorkstreetcoffee.com
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 York Street Coffee</p>
+</footer>
+
+<button id="topBtn" type="button" aria-label="Scroll to top">↑</button>
+
+<script>
+document.getElementById("topBtn").addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
+</script>
 
 </body>
-
 </html>
