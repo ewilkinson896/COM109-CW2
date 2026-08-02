@@ -1,6 +1,7 @@
 $(function () {
-    const CART_STORAGE_KEY = "cart";
+    "use strict";
 
+    const CART_STORAGE_KEY = "cart";
     const cartItemsEl = $("#cart-items");
     const cartSummaryEl = $("#cart-summary");
     const emptyCartButton = $("#empty-cart");
@@ -12,16 +13,10 @@ $(function () {
     const confirmationMessage = $("#confirmation-message");
 
     function getCart() {
-        const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-
-        if (!savedCart) {
-            return [];
-        }
-
         try {
-            const parsedCart = JSON.parse(savedCart);
-            return Array.isArray(parsedCart) ? parsedCart : [];
-        } catch (error) {
+            const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+            return savedCart ? JSON.parse(savedCart) : [];
+        } catch {
             return [];
         }
     }
@@ -31,88 +26,74 @@ $(function () {
     }
 
     function formatPrice(amount) {
-        return "£" + amount.toFixed(2);
+        return `£${amount.toFixed(2)}`;
+    }
+
+    function showFormErrors(errors) {
+        if (!errors.length) {
+            formErrorsEl.prop("hidden", true).empty();
+            return;
+        }
+
+        formErrorsEl.prop("hidden", false).html(errors.map((error) => `<p>${error}</p>`).join(""));
     }
 
     function renderCart() {
         const cart = getCart();
 
-        if (cart.length === 0) {
+        if (!cart.length) {
             cartItemsEl.html('<p class="cart-empty">Your cart is empty. <a href="product.html">Browse products</a> to add something.</p>');
             cartSummaryEl.text("");
             return;
         }
 
         cartItemsEl.empty();
+        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-        let total = 0;
+        cartItemsEl.append(
+            cart.map((item) => {
+                const subtotal = item.price * item.quantity;
+                return $("<div>")
+                    .addClass("cart-item")
+                    .attr("data-id", item.id)
+                    .html(
+                        `<div class="cart-item-info">` +
+                            `<span class="cart-item-name">${item.name}</span>` +
+                            `<span class="cart-item-meta">${formatPrice(item.price)} each &middot; subtotal ${formatPrice(subtotal)}</span>` +
+                        `</div>` +
+                        `<div class="cart-item-actions">` +
+                            `<button type="button" class="cart-item-qty-btn cart-item-decrease" aria-label="Decrease quantity">-</button>` +
+                            `<span class="cart-item-qty">${item.quantity}</span>` +
+                            `<button type="button" class="cart-item-qty-btn cart-item-increase" aria-label="Increase quantity">+</button>` +
+                            `<button type="button" class="cart-item-remove">Remove</button>` +
+                        `</div>`
+                    );
+            })
+        );
 
-        $.each(cart, function (_, item) {
-            const subtotal = item.price * item.quantity;
-            total += subtotal;
-
-            const row = $("<div>")
-                .addClass("cart-item")
-                .attr("data-id", item.id)
-                .html(
-                    '<div class="cart-item-info">' +
-                        '<span class="cart-item-name">' + item.name + '</span>' +
-                        '<span class="cart-item-meta">' + formatPrice(item.price) + ' each &middot; subtotal ' + formatPrice(subtotal) + '</span>' +
-                    '</div>' +
-                    '<div class="cart-item-actions">' +
-                        '<button type="button" class="cart-item-qty-btn cart-item-decrease" aria-label="Decrease quantity">-</button>' +
-                        '<span class="cart-item-qty">' + item.quantity + '</span>' +
-                        '<button type="button" class="cart-item-qty-btn cart-item-increase" aria-label="Increase quantity">+</button>' +
-                        '<button type="button" class="cart-item-remove">Remove</button>' +
-                    '</div>'
-                );
-
-            cartItemsEl.append(row);
-        });
-
-        cartSummaryEl.text("Total: " + formatPrice(total));
+        cartSummaryEl.text(`Total: ${formatPrice(total)}`);
     }
 
     function updateQuantity(id, delta) {
         const cart = getCart();
-        const item = cart.find(function (cartItem) {
-            return String(cartItem.id) === String(id);
-        });
+        const item = cart.find((cartItem) => String(cartItem.id) === String(id));
 
         if (!item) {
             return;
         }
 
         item.quantity += delta;
-
         const updatedCart = item.quantity > 0
             ? cart
-            : cart.filter(function (cartItem) {
-                return String(cartItem.id) !== String(id);
-            });
+            : cart.filter((cartItem) => String(cartItem.id) !== String(id));
 
         saveCart(updatedCart);
         renderCart();
     }
 
     function removeItem(id) {
-        const cart = getCart().filter(function (cartItem) {
-            return String(cartItem.id) !== String(id);
-        });
-
-        saveCart(cart);
+        saveCart(getCart().filter((cartItem) => String(cartItem.id) !== String(id)));
         renderCart();
-    }
-
-    function showFormErrors(errors) {
-        if (errors.length === 0) {
-            formErrorsEl.prop("hidden", true).empty();
-            return;
-        }
-
-        formErrorsEl.prop("hidden", false).html(errors.map(function (error) {
-            return "<p>" + error + "</p>";
-        }).join(""));
     }
 
     function validateCheckoutForm(formData) {
@@ -127,15 +108,14 @@ $(function () {
             { name: "card", label: "Card details" }
         ];
 
-        $.each(requiredFields, function (_, field) {
+        $.each(requiredFields, (_, field) => {
             const value = formData.get(field.name);
             if (!value || value.trim() === "") {
-                errors.push(field.label + " is required.");
+                errors.push(`${field.label} is required.`);
             }
         });
 
         const email = formData.get("email");
-
         if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             errors.push("Enter a valid email address.");
         }
@@ -143,49 +123,55 @@ $(function () {
         return errors;
     }
 
-    emptyCartButton.on("click", function () {
+    emptyCartButton.on("click", () => {
         saveCart([]);
         renderCart();
     });
 
-    cartItemsEl.on("click", function (event) {
+    cartItemsEl.on("click", (event) => {
         const row = $(event.target).closest(".cart-item");
-
         if (!row.length) {
             return;
         }
 
         const id = row.attr("data-id");
+        const target = $(event.target);
 
-        if ($(event.target).hasClass("cart-item-increase")) {
+        if (target.hasClass("cart-item-increase")) {
             updateQuantity(id, 1);
-        } else if ($(event.target).hasClass("cart-item-decrease")) {
+        } else if (target.hasClass("cart-item-decrease")) {
             updateQuantity(id, -1);
-        } else if ($(event.target).hasClass("cart-item-remove")) {
+        } else if (target.hasClass("cart-item-remove")) {
             removeItem(id);
         }
     });
 
-    checkoutForm.on("submit", function (event) {
+    checkoutForm.on("submit", (event) => {
         event.preventDefault();
 
-        const formData = new FormData(checkoutForm[0]);
-        const errors = validateCheckoutForm(formData);
-
-        showFormErrors(errors);
-
-        if (errors.length > 0) {
+        const cart = getCart();
+        if (!cart.length) {
+            showFormErrors(["Your cart is empty. Add an item before checking out."]);
             return;
         }
 
-        confirmationMessage.text("Thanks, " + formData.get("firstName") + "! Your order has been placed and will be delivered to " + formData.get("street") + ", " + formData.get("city") + ".");
+        const formElement = checkoutForm.get(0);
+        const formData = new FormData(formElement);
+        const errors = validateCheckoutForm(formData);
+
+        showFormErrors(errors);
+        if (errors.length) {
+            return;
+        }
+
+        confirmationMessage.text(`Thanks, ${formData.get("firstName")}! Your order has been placed and will be delivered to ${formData.get("street")}, ${formData.get("city")}.`);
 
         cartSection.hide();
         checkoutSection.hide();
         confirmationSection.show();
 
         saveCart([]);
-        checkoutForm[0].reset();
+        formElement.reset();
     });
 
     renderCart();
