@@ -172,7 +172,15 @@ $(function () {
         const formData = new FormData(checkoutForm[0]);
         const errors = validateCheckoutForm(formData);
 
-        showFormErrors(errors);
+    const cart = getCart();
+
+    if (cart.length === 0) {
+        showFormErrors(["Your cart is empty. Add an item before checking out."]);
+        return;
+    }
+
+    const formData = new FormData(checkoutForm);
+    const errors = validateCheckoutForm(formData);
 
         if (errors.length > 0) {
             return;
