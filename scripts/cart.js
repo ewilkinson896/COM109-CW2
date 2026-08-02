@@ -171,6 +171,13 @@ cartItemsEl.addEventListener("click", function (event) {
 checkoutForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
+    const cart = getCart();
+
+    if (cart.length === 0) {
+        showFormErrors(["Your cart is empty. Add an item before checking out."]);
+        return;
+    }
+
     const formData = new FormData(checkoutForm);
     const errors = validateCheckoutForm(formData);
 
