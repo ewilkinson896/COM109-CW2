@@ -473,7 +473,7 @@ label {
 
 .checkout-form button[type="submit"] {
 	grid-column: 1 / -1;
-	justify-self: start;
+	justify-self: center;
 	margin-top: 8px;
 }
 
