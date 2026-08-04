@@ -336,15 +336,20 @@ label {
 }
 
 /* ===================== Cart & Checkout ===================== */
-.cart-page {
-	max-width: 1100px;
-	margin: 0 auto;
+body.cart-page-body {
 	background-image: linear-gradient(rgba(250, 247, 242, 0.9), rgba(250, 247, 242, 0.9)), url("../images/latte.jpg");
 	background-size: cover;
 	background-position: center;
-	background-attachment: fixed;
-	border-radius: 12px;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+}
+
+.cart-page {
+	max-width: 1100px;
+	min-height: calc(100vh - 40px);
+	margin: 20px auto;
 	padding: 24px;
+	border-radius: 12px;
 }
 
 .page-intro {
