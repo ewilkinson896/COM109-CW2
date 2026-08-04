@@ -51,6 +51,8 @@ const products = [
     }
 ];
 
+const CART_STORAGE_KEY = "cart";
+
 let activeFilter = "all";
 let searchTerm = "";
 
@@ -81,9 +83,44 @@ function createProductCard(product) {
             '<h3 class="product-name">' + product.name + '</h3>' +
             '<p class="product-price">£' + product.price.toFixed(2) + '</p>' +
             '<p class="product-description">' + product.description + '</p>' +
-        '</div>';
+        '</div>' +
+        '<button type="button" class="add-to-cart-btn" aria-label="Add ' + product.name + ' to cart">+</button>';
 
     return card;
+}
+
+function getCart() {
+    try {
+        const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+        const parsedCart = savedCart ? JSON.parse(savedCart) : [];
+        return Array.isArray(parsedCart) ? parsedCart : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+}
+
+function addToCart(product) {
+    const cart = getCart();
+    const existingItem = cart.find(function (item) {
+        return String(item.id) === String(product.id);
+    });
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: 1
+        });
+    }
+
+    saveCart(cart);
 }
 
 function renderProducts() {
@@ -116,6 +153,34 @@ filterButtons.forEach(function (button) {
 searchInput.addEventListener("input", function (event) {
     searchTerm = event.target.value.trim().toLowerCase();
     renderProducts();
+});
+
+productGrid.addEventListener("click", function (event) {
+    const button = event.target.closest(".add-to-cart-btn");
+
+    if (!button) {
+        return;
+    }
+
+    const card = button.closest(".product-card");
+    const productId = Number(card.dataset.id);
+    const product = products.find(function (item) {
+        return item.id === productId;
+    });
+
+    if (!product) {
+        return;
+    }
+
+    addToCart(product);
+
+    button.textContent = "✓";
+    button.disabled = true;
+
+    setTimeout(function () {
+        button.textContent = "+";
+        button.disabled = false;
+    }, 900);
 });
 
 renderProducts();
