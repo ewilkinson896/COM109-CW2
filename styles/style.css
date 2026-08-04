@@ -272,6 +272,55 @@ label {
 	max-width: 520px;
 }
 
+.subscription-page .page-intro {
+	max-width: 720px;
+	margin: 10px 0 20px;
+	color: var(--text-muted);
+	background-color: rgba(255, 255, 255, 0.78);
+	display: inline-block;
+	padding: 8px 12px;
+	border-radius: 4px;
+}
+
+.subscription-page #subscriptionForm {
+	max-width: 720px;
+	gap: 16px;
+	background: none;
+	border: none;
+	padding: 0;
+}
+
+.form-section {
+	background-color: rgba(255, 255, 255, 0.92);
+	border: 1px solid var(--border);
+	padding: 18px;
+	display: grid;
+	gap: 10px;
+}
+
+.form-section h2 {
+	margin-bottom: 4px;
+	font-size: 1.05rem;
+}
+
+.section-note {
+	color: var(--text-muted);
+	font-size: 0.92rem;
+	margin: -2px 0 4px;
+}
+
+.coffee-list {
+	display: grid;
+	gap: 10px;
+}
+
+.gift-option {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 2px;
+}
+
 /* ===================== Messages ===================== */
 #formMessage,
 #coffeeMessage,
@@ -280,6 +329,13 @@ label {
 	border: 1px solid var(--border);
 	padding: 16px;
 	margin-top: 16px;
+}
+
+#formMessage {
+	border: 1px solid var(--border);
+	background-color: rgba(255, 255, 255, 0.9);
+	min-height: 1.5rem;
+	color: var(--text-muted);
 }
 
 .coffee-box {
@@ -296,6 +352,11 @@ label {
 
 .coffee-box p {
 	margin: 0;
+}
+
+.summary-box p strong {
+	display: inline-block;
+	min-width: 84px;
 }
 
 /* ===================== Product Page ===================== */
@@ -457,6 +518,10 @@ footer {
 
 /* ===================== Responsive ===================== */
 @media (max-width: 600px) {
+	.subscription-page .page-intro {
+		display: block;
+	}
+
 	.checkout-form {
 		grid-template-columns: 1fr;
 	}
