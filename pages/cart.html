@@ -19,47 +19,73 @@
         </div>
     </nav>
 
-    <main>
-      <h1>Your Cart</h1>
+    <main class="cart-page">
+      <div class="page-intro">
+        <h1>Your Cart</h1>
+        <p>Pick up your favourites, review your order and complete checkout in a few simple steps.</p>
+      </div>
 
-      <section class="cart-section">
-        <div class="cart-header">
-          <h2>Cart Items</h2>
-          <button id="empty-cart" type="button">Empty Cart</button>
-        </div>
-        <div id="cart-items"></div>
-        <div id="cart-summary"></div>
-      </section>
+      <div class="cart-layout">
+        <section class="cart-section">
+          <div class="cart-header">
+            <h2>Cart Items</h2>
+            <button id="empty-cart" type="button">Empty Cart</button>
+          </div>
+          <div id="cart-items"></div>
+          <div id="cart-summary"></div>
+        </section>
 
-      <section class="checkout-section">
-        <h2>Checkout</h2>
-        <form id="checkout-form" novalidate class="checkout-form">
-          <div id="form-errors" hidden></div>
+        <section class="checkout-section">
+          <h2>Checkout</h2>
+          <form id="checkout-form" novalidate class="checkout-form">
+            <div id="form-errors" hidden></div>
 
-          <label class="form-label">First name: </label>
-          <input name="firstName" type="text" class="form-input"/>
+            <div class="form-section">
+              <h3>Contact details</h3>
+              <div class="form-grid">
+                <label class="form-label" for="firstName">First name</label>
+                <input id="firstName" name="firstName" type="text" class="form-input" />
 
-          <label class="form-label">Last name: </label>
-          <input name="lastName" type="text" class="form-input"/>
+                <label class="form-label" for="lastName">Last name</label>
+                <input id="lastName" name="lastName" type="text" class="form-input" />
 
-          <label class="form-label">Email address: </label>
-          <input name="email" type="email" class="form-input" />
+                <label class="form-label full" for="email">Email address</label>
+                <input id="email" name="email" type="email" class="form-input full" />
+              </div>
+            </div>
 
-          <label class="form-label">Delivery address: </label>
-          <input name="street" type="text" class="form-input" />
+            <div class="form-section">
+              <h3>Delivery details</h3>
+              <div class="form-grid">
+                <label class="form-label full" for="street">Delivery address</label>
+                <input id="street" name="street" type="text" class="form-input full" />
 
-          <label class="form-label">City: </label>
-          <input name="city" type="text" class="form-input" />
+                <label class="form-label" for="city">City</label>
+                <input id="city" name="city" type="text" class="form-input" />
 
-          <label class="form-label">Postcode: </label>
-          <input name="postcode" type="text" class="form-input" />
+                <label class="form-label" for="postcode">Postcode</label>
+                <input id="postcode" name="postcode" type="text" class="form-input" />
+              </div>
+            </div>
 
-          <label class="form-label">Card details: </label>
-          <input name="card" type="text" class="form-input" />
+            <div class="form-section">
+              <h3>Payment details</h3>
+              <div class="form-grid">
+                <label class="form-label full" for="cardNumber">Card number</label>
+                <input id="cardNumber" name="cardNumber" type="text" inputmode="numeric" autocomplete="cc-number" class="form-input full" placeholder="1234 5678 9012 3456" />
 
-          <button type="submit">Place Order</button>
-        </form>
-      </section>
+                <label class="form-label" for="expiry">Expiry date</label>
+                <input id="expiry" name="expiry" type="text" autocomplete="cc-exp" class="form-input" placeholder="MM/YY" />
+
+                <label class="form-label" for="cvv">CVV</label>
+                <input id="cvv" name="cvv" type="text" inputmode="numeric" autocomplete="cc-csc" class="form-input" placeholder="123" />
+              </div>
+            </div>
+
+            <button type="submit">Place Order</button>
+          </form>
+        </section>
+      </div>
 
       <section id="confirmation-section" hidden>
         <h2>Order Confirmed</h2>
