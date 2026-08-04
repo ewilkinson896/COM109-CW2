@@ -314,6 +314,18 @@ label {
 	gap: 10px;
 }
 
+.coffee-box-fields {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+	gap: 10px;
+	flex: 1 1 100%;
+}
+
+.coffee-box-fields label {
+	display: grid;
+	gap: 6px;
+}
+
 .gift-option {
 	display: inline-flex;
 	align-items: center;
