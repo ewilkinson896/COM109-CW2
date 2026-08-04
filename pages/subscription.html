@@ -22,44 +22,54 @@
 
     <main class="subscription-page">
         <h1>Build Your Subscription Box</h1>
+        <p class="page-intro">Set up a coffee subscription that matches your taste, then review the live summary before saving it.</p>
 
         <form id="subscriptionForm">
-            <label for="customerName">Name</label>
-            <input type="text" id="customerName" name="customerName">
+            <section class="form-section">
+                <h2>Customer Details</h2>
+                <label for="customerName">Name</label>
+                <input type="text" id="customerName" name="customerName">
 
-            <label for="customerEmail">Email</label>
-            <input type="email" id="customerEmail" name="customerEmail">
+                <label for="customerEmail">Email</label>
+                <input type="email" id="customerEmail" name="customerEmail">
+            </section>
 
-            <label>Coffee Details</label>
-            <button type="button" id="addCoffeeButton">Add Coffee</button>
-            <div id="coffeeList"></div>
+            <section class="form-section">
+                <h2>Coffee Details</h2>
+                <p class="section-note">Add one coffee at a time.</p>
+                <button type="button" id="addCoffeeButton">Add Coffee</button>
+                <div id="coffeeList" class="coffee-list"></div>
+            </section>
 
-            <p>Bakery Add-ons</p>
-            <label><input type="checkbox" class="addon" value="Croissant"> Croissant</label>
-            <label><input type="checkbox" class="addon" value="Brownie"> Brownie</label>
-            <label><input type="checkbox" class="addon" value="Cookie"> Cookie</label>
+            <section class="form-section">
+                <h2>Bakery Add-ons</h2>
+                <label><input type="checkbox" class="addon" value="Croissant"> Croissant</label>
+                <label><input type="checkbox" class="addon" value="Brownie"> Brownie</label>
+                <label><input type="checkbox" class="addon" value="Cookie"> Cookie</label>
+            </section>
 
-            <label for="frequency">Delivery Frequency</label>
-            <select id="frequency" name="frequency">
-                <option value="Weekly">Weekly</option>
-                <option value="Fortnightly">Fortnightly</option>
-                <option value="Monthly">Monthly</option>
-            </select>
+            <section class="form-section">
+                <h2>Delivery</h2>
+                <label for="frequency">Delivery Frequency</label>
+                <select id="frequency" name="frequency">
+                    <option value="Weekly">Weekly</option>
+                    <option value="Fortnightly">Fortnightly</option>
+                    <option value="Monthly">Monthly</option>
+                </select>
 
-            <label><input type="checkbox" id="gift" name="gift"> This is a gift</label>
+                <label class="gift-option"><input type="checkbox" id="gift" name="gift"> This is a gift</label>
+            </section>
 
             <button type="submit">Save Subscription</button>
         </form>
 
-        <div id="formMessage"></div>
-
         <section class="summary-box">
             <h2>Order Summary</h2>
-            <p id="summaryCoffee">Coffees: 0 selected</p>
-            <p id="summaryAddons">Add-ons: None</p>
-            <p id="summaryFrequency">Delivery: Weekly</p>
-            <p id="summaryGift">Gift: No</p>
-            <p id="summaryPrice">Price: £0</p>
+            <p id="summaryCoffee"><strong>Coffees:</strong> 0 selected</p>
+            <p id="summaryAddons"><strong>Add-ons:</strong> None</p>
+            <p id="summaryFrequency"><strong>Delivery:</strong> Weekly</p>
+            <p id="summaryGift"><strong>Gift:</strong> No</p>
+            <p id="summaryPrice"><strong>Price:</strong> £0</p>
         </section>
     </main>
 

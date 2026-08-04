@@ -71,7 +71,13 @@ $(function () {
             })
         );
 
-        cartSummaryEl.text(`Total: ${formatPrice(total)}`);
+        cartSummaryEl.html(`
+            <div class="summary-card">
+                <p><span>Subtotal</span><strong>${formatPrice(total)}</strong></p>
+                <p><span>Delivery</span><strong>Free</strong></p>
+                <p class="summary-total"><span>Total</span><strong>${formatPrice(total)}</strong></p>
+            </div>
+        `);
     }
 
     function updateQuantity(id, delta) {
@@ -105,7 +111,9 @@ $(function () {
             { name: "street", label: "Delivery address" },
             { name: "city", label: "City" },
             { name: "postcode", label: "Postcode" },
-            { name: "card", label: "Card details" }
+            { name: "cardNumber", label: "Card number" },
+            { name: "expiry", label: "Expiry date" },
+            { name: "cvv", label: "CVV" }
         ];
 
         $.each(requiredFields, (_, field) => {
@@ -118,6 +126,21 @@ $(function () {
         const email = formData.get("email");
         if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             errors.push("Enter a valid email address.");
+        }
+
+        const cardNumber = formData.get("cardNumber").replace(/\s+/g, "");
+        if (cardNumber && !/^\d{16}$/.test(cardNumber)) {
+            errors.push("Card number must be 16 digits.");
+        }
+
+        const expiry = formData.get("expiry");
+        if (expiry && !/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+            errors.push("Expiry date must use MM/YY format.");
+        }
+
+        const cvv = formData.get("cvv");
+        if (cvv && !/^\d{3}$/.test(cvv)) {
+            errors.push("CVV must be 3 digits.");
         }
 
         return errors;
