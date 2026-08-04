@@ -128,6 +128,16 @@ $(function () {
             errors.push("Enter a valid email address.");
         }
 
+        const firstName = formData.get("firstName");
+        if (firstName && /\d/.test(firstName)) {
+            errors.push("First name must not contain numbers.");
+        }
+
+        const lastName = formData.get("lastName");
+        if (lastName && /\d/.test(lastName)) {
+            errors.push("Last name must not contain numbers.");
+        }
+
         const cardNumber = formData.get("cardNumber").replace(/\s+/g, "");
         if (cardNumber && !/^\d{16}$/.test(cardNumber)) {
             errors.push("Card number must be 16 digits.");
@@ -136,6 +146,15 @@ $(function () {
         const expiry = formData.get("expiry");
         if (expiry && !/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
             errors.push("Expiry date must use MM/YY format.");
+        } else if (expiry) {
+            const [month, year] = expiry.split("/").map((value) => Number(value));
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear() % 100;
+            const currentMonth = currentDate.getMonth() + 1;
+
+            if (year < currentYear || (year === currentYear && month < currentMonth)) {
+                errors.push("Card expiry date must be in the future.");
+            }
         }
 
         const cvv = formData.get("cvv");
