@@ -13,6 +13,12 @@ var pricing = {
     }
 };
 
+var STORAGE_KEYS = {
+    coffeeDetails: "coffeeDetails",
+    subscriptionBox: "subscriptionBox",
+    subscriptionDraft: "subscriptionDraft"
+};
+
 var form = document.getElementById("subscriptionForm");
 var nameInput = document.getElementById("customerName");
 var emailInput = document.getElementById("customerEmail");
@@ -29,8 +35,93 @@ var summaryGift = document.getElementById("summaryGift");
 var summaryPrice = document.getElementById("summaryPrice");
 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function readJsonFromStorage(key, fallback) {
+    var value = localStorage.getItem(key);
+
+    if (!value) {
+        return fallback;
+    }
+
+    try {
+        return JSON.parse(value);
+    } catch (error) {
+        return fallback;
+    }
+}
+
+function writeJsonToStorage(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
 function formatPrice(amount) {
     return "£" + amount.toFixed(2);
+}
+
+function isKnownAddOn(item) {
+    return Object.prototype.hasOwnProperty.call(pricing.addOns, item);
+}
+
+function normaliseCoffeeItem(item) {
+    if (!item || typeof item !== "object") {
+        return null;
+    }
+
+    if (typeof item.coffee !== "string" || typeof item.roast !== "string" || typeof item.grind !== "string") {
+        return null;
+    }
+
+    if (item.coffee.trim() === "" || item.roast.trim() === "" || item.grind.trim() === "") {
+        return null;
+    }
+
+    return {
+        coffee: item.coffee,
+        roast: item.roast,
+        grind: item.grind
+    };
+}
+
+function getLegacyCoffeeDetails(rawDraft) {
+    if (!rawDraft || typeof rawDraft !== "object") {
+        return [];
+    }
+
+    if (!Array.isArray(rawDraft.coffees)) {
+        return [];
+    }
+
+    return rawDraft.coffees.map(function (coffeeName) {
+        return normaliseCoffeeItem({
+            coffee: coffeeName,
+            roast: rawDraft.roast,
+            grind: rawDraft.grind
+        });
+    }).filter(Boolean);
+}
+
+function sanitiseDraft(rawDraft) {
+    var draft;
+    var rawCoffeeDetails;
+
+    if (!rawDraft || typeof rawDraft !== "object") {
+        return null;
+    }
+
+    rawCoffeeDetails = Array.isArray(rawDraft.coffeeDetails)
+        ? rawDraft.coffeeDetails
+        : getLegacyCoffeeDetails(rawDraft);
+
+    draft = {
+        name: typeof rawDraft.name === "string" ? rawDraft.name.trim() : "",
+        email: typeof rawDraft.email === "string" ? rawDraft.email.trim() : "",
+        coffeeDetails: rawCoffeeDetails.map(normaliseCoffeeItem).filter(Boolean),
+        addOns: Array.isArray(rawDraft.addOns) ? rawDraft.addOns.filter(isKnownAddOn) : [],
+        frequency: pricing.frequencyMultiplier[rawDraft.frequency] !== undefined ? rawDraft.frequency : "Weekly",
+        gift: Boolean(rawDraft.gift),
+        updatedAt: typeof rawDraft.updatedAt === "string" ? rawDraft.updatedAt : ""
+    };
+
+    return draft;
 }
 
 function getOrCreateMessageElement() {
@@ -51,15 +142,9 @@ function getOrCreateMessageElement() {
 }
 
 function getCoffeeDetails() {
-    var savedCoffeeDetails = localStorage.getItem("coffeeDetails");
+    var savedCoffeeDetails = readJsonFromStorage(STORAGE_KEYS.coffeeDetails, null);
 
     if (!savedCoffeeDetails) {
-        return [];
-    }
-
-    try {
-        savedCoffeeDetails = JSON.parse(savedCoffeeDetails);
-    } catch (error) {
         return [];
     }
 
@@ -127,7 +212,55 @@ function calculateSubscriptionTotal(state) {
 }
 
 function saveCoffeeDetails(coffeeDetails) {
-    localStorage.setItem("coffeeDetails", JSON.stringify(coffeeDetails));
+    writeJsonToStorage(STORAGE_KEYS.coffeeDetails, coffeeDetails);
+}
+
+function saveSubscriptionDraft(state) {
+    writeJsonToStorage(STORAGE_KEYS.subscriptionDraft, {
+        name: state.name,
+        email: state.email,
+        coffeeDetails: state.coffeeDetails,
+        addOns: state.addOns,
+        frequency: state.frequency,
+        gift: state.gift,
+        updatedAt: new Date().toISOString()
+    });
+}
+
+function saveDraftFromCurrentState() {
+    saveSubscriptionDraft(getCurrentSubscriptionState());
+}
+
+function restoreDraftIntoForm() {
+    var rawDraft = readJsonFromStorage(STORAGE_KEYS.subscriptionDraft, null);
+    var draft = sanitiseDraft(rawDraft);
+    var restoredAddOns;
+
+    if (!draft) {
+        return false;
+    }
+
+    nameInput.value = draft.name;
+    emailInput.value = draft.email;
+    frequencyInput.value = draft.frequency;
+    giftInput.checked = draft.gift;
+
+    restoredAddOns = {};
+    draft.addOns.forEach(function (item) {
+        restoredAddOns[item] = true;
+    });
+
+    addOnInputs.forEach(function (item) {
+        item.checked = Boolean(restoredAddOns[item.value]);
+    });
+
+    saveCoffeeDetails(draft.coffeeDetails);
+
+    return true;
+}
+
+function clearSubscriptionDraft() {
+    localStorage.removeItem(STORAGE_KEYS.subscriptionDraft);
 }
 
 function deleteCoffee(index) {
@@ -136,6 +269,7 @@ function deleteCoffee(index) {
     coffeeDetails.splice(index, 1);
     saveCoffeeDetails(coffeeDetails);
     updateSummary();
+    saveDraftFromCurrentState();
 }
 
 function renderCoffeeList(coffeeDetails) {
@@ -197,6 +331,13 @@ function showSuccess(messageText) {
     var feedback = getOrCreateMessageElement();
 
     feedback.className = "form-success";
+    feedback.textContent = messageText;
+}
+
+function showInfo(messageText) {
+    var feedback = getOrCreateMessageElement();
+
+    feedback.className = "form-info";
     feedback.textContent = messageText;
 }
 
@@ -282,6 +423,7 @@ form.addEventListener("input", function () {
     var errors;
 
     updateSummary();
+    saveDraftFromCurrentState();
 
     clearFieldErrors();
     errors = validateForm();
@@ -293,8 +435,12 @@ form.addEventListener("input", function () {
         message.className = "";
     }
 });
-window.addEventListener("pageshow", updateSummary);
+window.addEventListener("pageshow", function () {
+    updateSummary();
+    saveDraftFromCurrentState();
+});
 addCoffeeButton.addEventListener("click", function () {
+    saveDraftFromCurrentState();
     window.location.href = "coffee-details.html";
 });
 coffeeList.addEventListener("click", function (event) {
@@ -317,8 +463,13 @@ form.addEventListener("submit", function (event) {
         return;
     }
 
-    localStorage.setItem("subscriptionBox", JSON.stringify(state));
+    writeJsonToStorage(STORAGE_KEYS.subscriptionBox, state);
+    clearSubscriptionDraft();
     showSuccess("Subscription saved");
 });
+
+if (restoreDraftIntoForm()) {
+    showInfo("Draft restored from your last visit.");
+}
 
 updateSummary();

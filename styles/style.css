@@ -439,6 +439,11 @@ label {
 	color: #2f5e1f;
 }
 
+#formMessage.form-info {
+	border-color: var(--accent);
+	color: #6f4a2e;
+}
+
 .input-error {
 	border-color: var(--danger);
 	background-color: #fff5f5;
