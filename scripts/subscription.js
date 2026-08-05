@@ -228,10 +228,13 @@ function calculateSubscriptionTotal(state) {
 }
 
 function createSubscriptionCartItem(state, totals) {
+    var addOnText = state.addOns.length ? state.addOns.join(", ") : "No add-ons";
+    var giftText = state.gift ? "Gift option" : "No gift";
+
     return {
         id: SUBSCRIPTION_CART_ITEM_ID,
         name: "Coffee Subscription",
-        description: state.frequency + " delivery",
+        description: state.frequency + " delivery | " + state.coffeeDetails.length + " coffees | " + addOnText + " | " + giftText,
         price: Number(totals.total.toFixed(2)),
         quantity: 1,
         type: "subscription"
