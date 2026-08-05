@@ -87,6 +87,31 @@ nav a.current {
 	border-bottom-color: var(--accent);
 }
 
+/* ===================== Home Logo ===================== */
+.home-logo {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 320px;
+	height: 320px;
+	object-fit: cover;
+	background-color: #291c15;
+	border-radius: 50%;
+	z-index: 10;
+	box-shadow: 4px 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+@media (min-width: 1300px) {
+	.home-logo {
+		display: block;
+	}
+
+	.home-logo + nav .brand {
+		visibility: hidden;
+	}
+}
+
 /* ===================== Layout ===================== */
 main {
 	max-width: 900px;
