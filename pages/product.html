@@ -23,7 +23,6 @@
     <main class="product-page">
         <section class="product-intro">
             <h1>Small-batch beans and same day bakes!</h1>
-            <p>Browse our catalogue of treats here!</p>
         </section>
 
         <section class="product-controls">
@@ -38,13 +37,22 @@
                 <input type="search" id="productSearch" placeholder="Search products...">
             </div>
         </section>
-
+        <p>* Click on my image to reveal my description!</p>
         <section id="productGrid" class="product-grid">
             <!-- Product cards are rendered here by product.js -->
         </section>
 
         <p id="noResultsMessage" class="no-results" hidden>No products match your search.</p>
     </main>
+
+    <div id="productModal" class="modal-overlay" hidden>
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalProductDescription">
+            <button type="button" class="modal-close" aria-label="Close">&times;</button>
+            <div class="modal-body">
+                <div id="modalProductDescription"></div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2026 York Street Coffee</p>

@@ -208,6 +208,82 @@ main section ul li::before {
 	cursor: default;
 }
 
+.product-card-body,
+.product-name,
+.product-description {
+	cursor: pointer;
+}
+
+/* ===================== Product Modal ===================== */
+.modal-overlay {
+	position: fixed;
+	inset: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	z-index: 200;
+}
+
+.modal-overlay[hidden] {
+	display: none;
+}
+
+.modal-box {
+	position: relative;
+	width: 100%;
+	max-width: 420px;
+	background-color: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.modal-body {
+	padding: 32px 24px 24px;
+}
+
+.modal-body p {
+	margin-bottom: 14px;
+}
+
+.modal-details {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.modal-details li {
+	position: relative;
+	padding: 6px 0 6px 18px;
+	font-size: 0.95rem;
+	color: var(--text-muted);
+}
+
+.modal-details li::before {
+	content: "\2013";
+	position: absolute;
+	left: 0;
+	color: var(--accent);
+}
+
+.modal-close {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border-radius: 50%;
+	font-size: 1.1rem;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1;
+}
+
 .featured-item,
 .product {
 	text-align: center;
