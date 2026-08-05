@@ -227,8 +227,31 @@ function saveSubscriptionDraft(state) {
     });
 }
 
+function hasMeaningfulDraftData(state) {
+    if (state.name !== "" || state.email !== "") {
+        return true;
+    }
+
+    if (state.coffeeDetails.length > 0 || state.addOns.length > 0 || state.gift) {
+        return true;
+    }
+
+    if (state.frequency !== "Weekly") {
+        return true;
+    }
+
+    return false;
+}
+
 function saveDraftFromCurrentState() {
-    saveSubscriptionDraft(getCurrentSubscriptionState());
+    var state = getCurrentSubscriptionState();
+
+    if (!hasMeaningfulDraftData(state)) {
+        clearSubscriptionDraft();
+        return;
+    }
+
+    saveSubscriptionDraft(state);
 }
 
 function restoreDraftIntoForm() {
@@ -237,6 +260,10 @@ function restoreDraftIntoForm() {
     var restoredAddOns;
 
     if (!draft) {
+        if (rawDraft) {
+            clearSubscriptionDraft();
+        }
+
         return false;
     }
 
