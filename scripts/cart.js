@@ -53,12 +53,15 @@ $(function () {
         cartItemsEl.append(
             cart.map((item) => {
                 const subtotal = item.price * item.quantity;
+                const description = item.description ? `<span class="cart-item-description">${item.description}</span>` : "";
+
                 return $("<div>")
                     .addClass("cart-item")
                     .attr("data-id", item.id)
                     .html(
                         `<div class="cart-item-info">` +
                             `<span class="cart-item-name">${item.name}</span>` +
+                            description +
                             `<span class="cart-item-meta">${formatPrice(item.price)} each &middot; subtotal ${formatPrice(subtotal)}</span>` +
                         `</div>` +
                         `<div class="cart-item-actions">` +

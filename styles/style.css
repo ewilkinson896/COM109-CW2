@@ -672,6 +672,13 @@ body.cart-page-body {
 	color: var(--text-muted);
 }
 
+.cart-item-description {
+	display: block;
+	font-size: 0.82rem;
+	color: #5d554a;
+	margin: 2px 0 3px;
+}
+
 .cart-item-actions {
 	display: flex;
 	align-items: center;

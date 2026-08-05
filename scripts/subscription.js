@@ -14,10 +14,12 @@ var pricing = {
 };
 
 var STORAGE_KEYS = {
+    cart: "cart",
     coffeeDetails: "coffeeDetails",
     subscriptionBox: "subscriptionBox",
     subscriptionDraft: "subscriptionDraft"
 };
+var SUBSCRIPTION_CART_ITEM_ID = "subscription-box";
 
 var form = document.getElementById("subscriptionForm");
 var nameInput = document.getElementById("customerName");
@@ -51,6 +53,20 @@ function readJsonFromStorage(key, fallback) {
 
 function writeJsonToStorage(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getCartItems() {
+    var savedCart = readJsonFromStorage(STORAGE_KEYS.cart, []);
+
+    if (!Array.isArray(savedCart)) {
+        return [];
+    }
+
+    return savedCart;
+}
+
+function saveCartItems(items) {
+    writeJsonToStorage(STORAGE_KEYS.cart, items);
 }
 
 function formatPrice(amount) {
@@ -209,6 +225,37 @@ function calculateSubscriptionTotal(state) {
         multiplier: multiplier,
         total: total
     };
+}
+
+function createSubscriptionCartItem(state, totals) {
+    var addOnText = state.addOns.length ? state.addOns.join(", ") : "No add-ons";
+    var giftText = state.gift ? "Gift option" : "No gift";
+
+    return {
+        id: SUBSCRIPTION_CART_ITEM_ID,
+        name: "Coffee Subscription",
+        description: state.frequency + " delivery | " + state.coffeeDetails.length + " coffees | " + addOnText + " | " + giftText,
+        price: Number(totals.total.toFixed(2)),
+        quantity: 1,
+        type: "subscription"
+    };
+}
+
+function upsertSubscriptionInCart(state, totals) {
+    var cart = getCartItems();
+    var itemIndex;
+
+    itemIndex = cart.findIndex(function (item) {
+        return String(item.id) === SUBSCRIPTION_CART_ITEM_ID;
+    });
+
+    if (itemIndex === -1) {
+        cart.push(createSubscriptionCartItem(state, totals));
+    } else {
+        cart[itemIndex] = createSubscriptionCartItem(state, totals);
+    }
+
+    saveCartItems(cart);
 }
 
 function saveCoffeeDetails(coffeeDetails) {
@@ -479,6 +526,7 @@ coffeeList.addEventListener("click", function (event) {
 form.addEventListener("submit", function (event) {
     var errors = validateForm();
     var state = getCurrentSubscriptionState();
+    var totals = calculateSubscriptionTotal(state);
 
     event.preventDefault();
     clearFieldErrors();
@@ -491,8 +539,9 @@ form.addEventListener("submit", function (event) {
     }
 
     writeJsonToStorage(STORAGE_KEYS.subscriptionBox, state);
+    upsertSubscriptionInCart(state, totals);
     clearSubscriptionDraft();
-    showSuccess("Subscription saved");
+    showSuccess("Subscription saved and added to cart");
 });
 
 if (restoreDraftIntoForm()) {
