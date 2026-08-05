@@ -27,9 +27,27 @@ var summaryAddons = document.getElementById("summaryAddons");
 var summaryFrequency = document.getElementById("summaryFrequency");
 var summaryGift = document.getElementById("summaryGift");
 var summaryPrice = document.getElementById("summaryPrice");
+var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function formatPrice(amount) {
     return "£" + amount.toFixed(2);
+}
+
+function getOrCreateMessageElement() {
+    if (message) {
+        return message;
+    }
+
+    message = document.createElement("div");
+    message.id = "formMessage";
+    message.setAttribute("role", "alert");
+    message.setAttribute("aria-live", "polite");
+
+    if (form && form.parentNode) {
+        form.parentNode.insertBefore(message, form.nextSibling);
+    }
+
+    return message;
 }
 
 function getCoffeeDetails() {
@@ -139,6 +157,69 @@ function renderSummary(state, totals) {
     summaryPrice.textContent = "Price: " + formatPrice(totals.total);
 }
 
+function clearFieldErrors() {
+    nameInput.classList.remove("input-error");
+    emailInput.classList.remove("input-error");
+    nameInput.removeAttribute("aria-invalid");
+    emailInput.removeAttribute("aria-invalid");
+}
+
+function applyFieldErrors(errors) {
+    errors.forEach(function (error) {
+        if (error.field === "name") {
+            nameInput.classList.add("input-error");
+            nameInput.setAttribute("aria-invalid", "true");
+        }
+
+        if (error.field === "email") {
+            emailInput.classList.add("input-error");
+            emailInput.setAttribute("aria-invalid", "true");
+        }
+    });
+}
+
+function renderErrors(errors) {
+    var feedback = getOrCreateMessageElement();
+
+    feedback.className = "form-error";
+
+    if (!errors.length) {
+        feedback.textContent = "";
+        return;
+    }
+
+    feedback.innerHTML = errors.map(function (error) {
+        return "<p>" + error.message + "</p>";
+    }).join("");
+}
+
+function showSuccess(messageText) {
+    var feedback = getOrCreateMessageElement();
+
+    feedback.className = "form-success";
+    feedback.textContent = messageText;
+}
+
+function focusFirstInvalidField(errors) {
+    if (!errors.length) {
+        return;
+    }
+
+    if (errors[0].field === "name") {
+        nameInput.focus();
+        return;
+    }
+
+    if (errors[0].field === "email") {
+        emailInput.focus();
+        return;
+    }
+
+    if (errors[0].field === "coffee") {
+        addCoffeeButton.focus();
+    }
+}
+
 function updateSummary() {
     var state = getCurrentSubscriptionState();
     var totals = calculateSubscriptionTotal(state);
@@ -149,23 +230,69 @@ function updateSummary() {
 
 function validateForm() {
     var state = getCurrentSubscriptionState();
+    var errors = [];
+    var missingCoffeeDetails;
 
     if (state.name === "") {
-        return "Enter your name";
+        errors.push({
+            field: "name",
+            message: "Enter your name"
+        });
+    } else if (state.name.length < 2) {
+        errors.push({
+            field: "name",
+            message: "Name must be at least 2 characters"
+        });
     }
 
     if (state.email === "") {
-        return "Enter your email";
+        errors.push({
+            field: "email",
+            message: "Enter your email"
+        });
+    } else if (!emailPattern.test(state.email)) {
+        errors.push({
+            field: "email",
+            message: "Enter a valid email"
+        });
     }
 
     if (state.coffeeDetails.length === 0) {
-        return "Choose at least one coffee";
+        errors.push({
+            field: "coffee",
+            message: "Choose at least one coffee"
+        });
     }
 
-    return "";
+    missingCoffeeDetails = state.coffeeDetails.some(function (item) {
+        return !item || !item.coffee || !item.roast || !item.grind;
+    });
+
+    if (missingCoffeeDetails) {
+        errors.push({
+            field: "coffee",
+            message: "Each coffee item needs a coffee, roast and grind"
+        });
+    }
+
+    return errors;
 }
 
-form.addEventListener("input", updateSummary);
+form.addEventListener("input", function () {
+    var errors;
+
+    updateSummary();
+
+    clearFieldErrors();
+    errors = validateForm();
+
+    if (errors.length) {
+        applyFieldErrors(errors);
+    } else if (message) {
+        message.textContent = "";
+        message.className = "";
+    }
+});
 window.addEventListener("pageshow", updateSummary);
 addCoffeeButton.addEventListener("click", function () {
     window.location.href = "coffee-details.html";
@@ -177,22 +304,21 @@ coffeeList.addEventListener("click", function (event) {
 });
 
 form.addEventListener("submit", function (event) {
-    var error = validateForm();
+    var errors = validateForm();
     var state = getCurrentSubscriptionState();
 
     event.preventDefault();
+    clearFieldErrors();
 
-    if (error !== "") {
-        if (message) {
-            message.textContent = error;
-        }
+    if (errors.length) {
+        renderErrors(errors);
+        applyFieldErrors(errors);
+        focusFirstInvalidField(errors);
         return;
     }
 
     localStorage.setItem("subscriptionBox", JSON.stringify(state));
-    if (message) {
-        message.textContent = "Subscription saved";
-    }
+    showSuccess("Subscription saved");
 });
 
 updateSummary();
