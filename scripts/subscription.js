@@ -246,16 +246,11 @@ function getSubscriptionCartItemId(state) {
 
 function upsertSubscriptionInCart(state, totals) {
     var cart = getCartItems();
-<<<<<<< HEAD
-    var itemIndex = cart.findIndex(function (item) {
-        return String(item.id) === SUBSCRIPTION_CART_ITEM_ID;
-=======
     var cartItem = createSubscriptionCartItem(state, totals);
     var itemIndex;
 
     itemIndex = cart.findIndex(function (item) {
         return String(item.id) === cartItem.id;
->>>>>>> c9b6ee2 (Fixed issue where you couldn't add two subscriptions to cart)
     });
 
     if (itemIndex === -1) {
