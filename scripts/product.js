@@ -98,6 +98,8 @@ const searchInput = $("#productSearch");
 const productModal = $("#productModal");
 const modalCloseButton = productModal.find(".modal-close");
 const modalDescription = $("#modalProductDescription");
+const modalBox = productModal.find(".modal-box");
+let lastFocusedElement = null;
 
 function getVisibleProducts() {
     return products.filter(function (product) {
@@ -121,6 +123,7 @@ function createProductCard(product) {
             '<h3 class="product-name">' + product.name + '</h3>' +
             '<p class="product-price">£' + product.price.toFixed(2) + '</p>' +
         '</div>' +
+        '<button type="button" class="view-details-btn" aria-label="View details for ' + product.name + '">View details</button>' +
         '<button type="button" class="add-to-cart-btn" aria-label="Add ' + product.name + ' to cart">+</button>';
 
     return card;
@@ -171,7 +174,36 @@ function renderProducts() {
     noResultsMessage.prop("hidden", visibleProducts.length > 0);
 }
 
-function openProductModal(product) {
+function getModalFocusableElements() {
+    return modalBox.find('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])').filter(':visible');
+}
+
+function trapModalFocus(event) {
+    const focusableElements = getModalFocusableElements();
+
+    if (!focusableElements.length) {
+        event.preventDefault();
+        modalBox.trigger("focus");
+        return;
+    }
+
+    const firstElement = focusableElements.get(0);
+    const lastElement = focusableElements.get(focusableElements.length - 1);
+    const activeElement = document.activeElement;
+
+    if (event.shiftKey && activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+        return;
+    }
+
+    if (!event.shiftKey && activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+    }
+}
+
+function openProductModal(product, triggerElement) {
     const detailsList = (product.details && product.details.length)
         ? '<ul class="modal-details">' +
             product.details.map(function (detail) {
@@ -180,13 +212,19 @@ function openProductModal(product) {
           '</ul>'
         : '';
 
-    modalDescription.html('<p>' + product.description + '</p>' + detailsList);
+    lastFocusedElement = triggerElement || document.activeElement;
+    modalDescription.html('<h2 id="modalProductTitle">' + product.name + '</h2><p id="modalProductText">' + product.description + '</p>' + detailsList);
 
     productModal.prop("hidden", false);
+    modalCloseButton.trigger("focus");
 }
 
 function closeProductModal() {
     productModal.prop("hidden", true);
+
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+        lastFocusedElement.focus();
+    }
 }
 
 function setActiveFilter(filter) {
@@ -238,7 +276,10 @@ productGrid.on("click", function (event) {
         return;
     }
 
-    openProductModal(product);
+    const detailsButton = card.find(".view-details-btn").get(0);
+    const triggerElement = $(event.target).closest(".view-details-btn").get(0) || detailsButton;
+
+    openProductModal(product, triggerElement);
 });
 
 modalCloseButton.on("click", closeProductModal);
@@ -250,8 +291,17 @@ productModal.on("click", function (event) {
 });
 
 $(document).on("keydown", function (event) {
-    if (event.key === "Escape" && !productModal.prop("hidden")) {
+    if (productModal.prop("hidden")) {
+        return;
+    }
+
+    if (event.key === "Escape") {
         closeProductModal();
+        return;
+    }
+
+    if (event.key === "Tab") {
+        trapModalFocus(event);
     }
 });
 

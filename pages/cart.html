@@ -8,6 +8,8 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body class="cart-page-body">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
     <nav>
         <span class="brand">York Street Coffee</span>
         <div class="nav-links">
@@ -15,11 +17,11 @@
             <a href="product.html">Products</a>
             <a href="information.html">Information</a>
             <a href="subscription.html">Subscription</a>
-          <a href="cart.html" class="nav-cart-link current"><img src="../images/Cart-icon.png" alt="" class="nav-cart-icon"></a>
+          <a href="cart.html" class="nav-cart-link current" aria-current="page"><img src="../images/Cart-icon.png" alt="" class="nav-cart-icon"><span>Cart</span></a>
         </div>
     </nav>
 
-    <main class="cart-page">
+    <main id="main-content" class="cart-page" tabindex="-1">
       <div class="page-intro">
         <h1>Your Cart</h1>
         <p>Pick up your favourites, review your order and complete checkout here.</p>
@@ -38,7 +40,7 @@
         <section class="checkout-section">
           <h2>Checkout</h2>
           <form id="checkout-form" novalidate class="checkout-form">
-            <div id="form-errors" hidden></div>
+            <div id="form-errors" role="alert" aria-live="assertive" aria-atomic="true" tabindex="-1" hidden></div>
 
             <div class="form-section">
               <h3>Contact details</h3>
