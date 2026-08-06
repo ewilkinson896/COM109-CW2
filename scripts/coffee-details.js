@@ -5,7 +5,7 @@ var grindSelect = document.getElementById("grind");
 var coffeeMessage = document.getElementById("coffeeMessage");
 
 function loadCoffeeDetails() {
-    var savedCoffeeDetails = localStorage.getItem("coffeeDetails");
+    var savedCoffeeDetails = sessionStorage.getItem("coffeeDetails");
 
     if (!savedCoffeeDetails) {
         return;
@@ -24,7 +24,7 @@ function loadCoffeeDetails() {
 }
 
 coffeeDetailsForm.addEventListener("submit", function (event) {
-    var savedCoffeeDetails = localStorage.getItem("coffeeDetails");
+    var savedCoffeeDetails = sessionStorage.getItem("coffeeDetails");
     var coffeeDetails = [];
 
     event.preventDefault();
@@ -43,7 +43,7 @@ coffeeDetailsForm.addEventListener("submit", function (event) {
         grind: grindSelect.value
     });
 
-    localStorage.setItem("coffeeDetails", JSON.stringify(coffeeDetails));
+    sessionStorage.setItem("coffeeDetails", JSON.stringify(coffeeDetails));
 
     coffeeMessage.textContent = "Coffee added";
     window.location.href = "subscription.html";

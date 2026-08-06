@@ -14,7 +14,7 @@ $(function () {
 
     function getCart() {
         try {
-            const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+            const savedCart = sessionStorage.getItem(CART_STORAGE_KEY);
             return savedCart ? JSON.parse(savedCart) : [];
         } catch {
             return [];
@@ -22,7 +22,7 @@ $(function () {
     }
 
     function saveCart(cart) {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
     }
 
     function formatPrice(amount) {
