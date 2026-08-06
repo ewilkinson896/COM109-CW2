@@ -2,6 +2,8 @@
 
 Coursework repository for COM109 Client Side Development.
 
+Link to repo: https://github.com/ewilkinson896/COM109-CW2
+
 This project is a multi-page coffee shop website built with HTML, CSS, and JavaScript (plus jQuery on selected pages). It includes a product browsing experience, a subscription builder, a cart/checkout flow, and accessibility-focused UI touches such as a skip link and keyboard-friendly interactions.
 
 ## Project Overview
