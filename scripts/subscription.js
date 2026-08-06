@@ -219,12 +219,16 @@ function calculateSubscriptionTotal(state) {
 
 function createSubscriptionCartItem(state, totals) {
     var addOnText = state.addOns.length ? state.addOns.join(", ") : "No add-ons";
-    var giftText = state.gift ? "Gift option" : "No gift";
+    var descriptionParts = [state.frequency + " delivery", state.coffeeDetails.length + " coffees", addOnText];
+
+    if (state.gift) {
+        descriptionParts.push("Gift");
+    }
 
     return {
         id: SUBSCRIPTION_CART_ITEM_ID,
         name: "Coffee Subscription",
-        description: state.frequency + " delivery | " + state.coffeeDetails.length + " coffees | " + addOnText + " | " + giftText,
+        description: descriptionParts.join(" | "),
         price: Number(totals.total.toFixed(2)),
         quantity: 1,
         type: "subscription"
@@ -276,10 +280,6 @@ function hasMeaningfulDraftData(state) {
     }
 
     return false;
-}
-
-function clearSubscriptionDraft() {
-    localStorage.removeItem(STORAGE_KEYS.subscriptionDraft);
 }
 
 function saveDraftFromCurrentState(showFeedback) {
