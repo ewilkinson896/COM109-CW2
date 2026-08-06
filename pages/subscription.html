@@ -15,14 +15,46 @@
             <a href="../index.html">Home</a>
             <a href="product.html">Products</a>
             <a href="information.html">Information</a>
-            <a href="cart.html">Cart</a>
             <a href="subscription.html" class="current">Subscription</a>
+            <a href="cart.html" class="nav-cart-link"><img src="../images/Cart-icon.png" alt="Cart" class="nav-cart-icon"></a>
         </div>
     </nav>
 
+    <section class="subscription-carousel" aria-label="Subscription highlights">
+        <div class="carousel-track">
+            <article class="carousel-slide is-active">
+                <img src="../images/Coffee Banner.jpg" alt="Coffee beans and brewed cups">
+                <div class="carousel-caption">
+                    <p>Choose your favourite coffee and grind style for every delivery.</p>
+                </div>
+            </article>
+            <article class="carousel-slide">
+                <img src="../images/Croissant Banner.jpg" alt="Freshly baked pastries">
+                <div class="carousel-caption">
+                    <p>Add bakery extras to make each box feel like a cafe treat.</p>
+                </div>
+            </article>
+            <article class="carousel-slide">
+                <img src="../images/Brownie Banner.jpg" alt="Chocolate brownies and coffee">
+                <div class="carousel-caption">
+                    <p>Turn it into a gift box and share your subscription with someone else.</p>
+                </div>
+            </article>
+        </div>
+
+        <button type="button" class="carousel-button carousel-button-prev" aria-label="Previous slide">&#10094;</button>
+        <button type="button" class="carousel-button carousel-button-next" aria-label="Next slide">&#10095;</button>
+
+        <div class="carousel-dots" aria-label="Slide selector">
+            <button type="button" class="carousel-dot is-active" data-slide="0" aria-label="Show first slide"></button>
+            <button type="button" class="carousel-dot" data-slide="1" aria-label="Show second slide"></button>
+            <button type="button" class="carousel-dot" data-slide="2" aria-label="Show third slide"></button>
+        </div>
+    </section>
+
     <main class="subscription-page">
         <h1>Build Your Subscription Box</h1>
-        <p class="page-intro">Set up a coffee subscription that matches your taste, then review the live summary before saving it.</p>
+        <p class="page-intro">Set up a coffee subscription that matches your taste, perfectly.</p>
 
         <form id="subscriptionForm">
             <section class="form-section">
@@ -43,9 +75,21 @@
 
             <section class="form-section">
                 <h2>Bakery Add-ons</h2>
-                <label><input type="checkbox" class="addon" value="Croissant"> Croissant</label>
-                <label><input type="checkbox" class="addon" value="Brownie"> Brownie</label>
-                <label><input type="checkbox" class="addon" value="Cookie"> Cookie</label>
+                <label class="addon-option">
+                    <input type="checkbox" class="addon" value="Croissant">
+                    <img src="../images/croissant.jpg" alt="Croissant">
+                    <span>Croissant</span>
+                </label>
+                <label class="addon-option">
+                    <input type="checkbox" class="addon" value="Cake">
+                    <img src="../images/chocolatecake.jpg" alt="Cake">
+                    <span>Cake</span>
+                </label>
+                <label class="addon-option">
+                    <input type="checkbox" class="addon" value="CinnamonBun">
+                    <img src="../images/cinnamon-bun.jpeg" alt="Cinnamon bun">
+                    <span>Cinnamon Bun</span>
+                </label>
             </section>
 
             <section class="form-section">
@@ -79,6 +123,7 @@
         <p>&copy; 2026 York Street Coffee</p>
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../scripts/subscription.js"></script>
 </body>
 

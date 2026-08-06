@@ -81,7 +81,7 @@ const products = [
             "Contains: Gluten, dairy",
             "Best served: Warm, straight from the oven"
         ],
-        image: "../images/croissant.jpg"
+        image: "../images/cinnamon-bun.jpeg"
     }
 ];
 
