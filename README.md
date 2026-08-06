@@ -25,13 +25,13 @@ York Street Coffee is a fictional Belfast cafe website designed to demonstrate c
 
 ## Roles
 
-Erin Wilkinson - subscription page and functionality
+- Erin Wilkinson - subscription page and functionality
 
-Emma Grier - cart page functionality
+- Emma Grier - cart page functionality
 
-Tom Wilkinson - main page and information page and functionality
+- Tom Wilkinson - main page and information page and functionality
 
-Joshua Nicholson - logo, product page and functionality and information page and functionality
+- Joshua Nicholson - logo, product page and functionality and information page and functionality
 
 ## Repository Structure
 
