@@ -226,7 +226,7 @@ function createSubscriptionCartItem(state, totals) {
     }
 
     return {
-        id: SUBSCRIPTION_CART_ITEM_ID,
+        id: getSubscriptionCartItemId(state),
         name: "Coffee Subscription",
         description: descriptionParts.join(" | "),
         price: Number(totals.total.toFixed(2)),
@@ -235,16 +235,35 @@ function createSubscriptionCartItem(state, totals) {
     };
 }
 
+function getSubscriptionCartItemId(state) {
+    return SUBSCRIPTION_CART_ITEM_ID + ":" + JSON.stringify({
+        coffeeDetails: state.coffeeDetails,
+        addOns: state.addOns,
+        frequency: state.frequency,
+        gift: state.gift
+    });
+}
+
 function upsertSubscriptionInCart(state, totals) {
     var cart = getCartItems();
+<<<<<<< HEAD
     var itemIndex = cart.findIndex(function (item) {
         return String(item.id) === SUBSCRIPTION_CART_ITEM_ID;
+=======
+    var cartItem = createSubscriptionCartItem(state, totals);
+    var itemIndex;
+
+    itemIndex = cart.findIndex(function (item) {
+        return String(item.id) === cartItem.id;
+>>>>>>> c9b6ee2 (Fixed issue where you couldn't add two subscriptions to cart)
     });
 
     if (itemIndex === -1) {
-        cart.push(createSubscriptionCartItem(state, totals));
+        cart.push(cartItem);
     } else {
-        cart[itemIndex] = createSubscriptionCartItem(state, totals);
+        cart[itemIndex].quantity += 1;
+        cart[itemIndex].price = cartItem.price;
+        cart[itemIndex].description = cartItem.description;
     }
 
     saveCartItems(cart);
