@@ -38,7 +38,7 @@ var summaryPrice = document.getElementById("summaryPrice");
 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function readJsonFromStorage(key, fallback) {
-    var value = localStorage.getItem(key);
+    var value = sessionStorage.getItem(key);
 
     if (!value) {
         return fallback;
@@ -52,7 +52,7 @@ function readJsonFromStorage(key, fallback) {
 }
 
 function writeJsonToStorage(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+    sessionStorage.setItem(key, JSON.stringify(value));
 }
 
 function getCartItems() {
@@ -334,7 +334,7 @@ function restoreDraftIntoForm() {
 }
 
 function clearSubscriptionDraft() {
-    localStorage.removeItem(STORAGE_KEYS.subscriptionDraft);
+    sessionStorage.removeItem(STORAGE_KEYS.subscriptionDraft);
 }
 
 function deleteCoffee(index) {
