@@ -209,7 +209,7 @@ $(function () {
             return;
         }
 
-        confirmationMessage.text(`Thanks, ${formData.get("firstName")}! Your order has been placed and will be delivered to ${formData.get("street")}, ${formData.get("city")}.`);
+        confirmationMessage.html(`<span>Thanks, ${formData.get("firstName")}! Your order has been placed successfully and will be delivered to ${formData.get("street")}, ${formData.get("city")}.</span>`);
 
         cartSection.hide();
         checkoutSection.hide();
