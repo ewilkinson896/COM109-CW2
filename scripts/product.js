@@ -90,14 +90,14 @@ const CART_STORAGE_KEY = "cart";
 let activeFilter = "all";
 let searchTerm = "";
 
-const productGrid = document.getElementById("productGrid");
-const noResultsMessage = document.getElementById("noResultsMessage");
-const filterButtons = document.querySelectorAll(".filter-button");
-const searchInput = document.getElementById("productSearch");
+const productGrid = $("#productGrid");
+const noResultsMessage = $("#noResultsMessage");
+const filterButtons = $(".filter-button");
+const searchInput = $("#productSearch");
 
-const productModal = document.getElementById("productModal");
-const modalCloseButton = productModal.querySelector(".modal-close");
-const modalDescription = document.getElementById("modalProductDescription");
+const productModal = $("#productModal");
+const modalCloseButton = productModal.find(".modal-close");
+const modalDescription = $("#modalProductDescription");
 
 function getVisibleProducts() {
     return products.filter(function (product) {
@@ -163,12 +163,12 @@ function addToCart(product) {
 function renderProducts() {
     const visibleProducts = getVisibleProducts();
 
-    productGrid.innerHTML = "";
+    productGrid.empty();
     visibleProducts.forEach(function (product) {
-        productGrid.appendChild(createProductCard(product));
+        productGrid.append(createProductCard(product));
     });
 
-    noResultsMessage.hidden = visibleProducts.length > 0;
+    noResultsMessage.prop("hidden", visibleProducts.length > 0);
 }
 
 function openProductModal(product) {
@@ -180,44 +180,42 @@ function openProductModal(product) {
           '</ul>'
         : '';
 
-    modalDescription.innerHTML = '<p>' + product.description + '</p>' + detailsList;
+    modalDescription.html('<p>' + product.description + '</p>' + detailsList);
 
-    productModal.hidden = false;
+    productModal.prop("hidden", false);
 }
 
 function closeProductModal() {
-    productModal.hidden = true;
+    productModal.prop("hidden", true);
 }
 
 function setActiveFilter(filter) {
     activeFilter = filter;
 
-    filterButtons.forEach(function (button) {
-        button.classList.toggle("active", button.dataset.filter === filter);
+    filterButtons.each(function () {
+        $(this).toggleClass("active", $(this).data("filter") === filter);
     });
 
     renderProducts();
 }
 
-filterButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-        setActiveFilter(button.dataset.filter);
-    });
+filterButtons.on("click", function () {
+    setActiveFilter($(this).data("filter"));
 });
 
-searchInput.addEventListener("input", function (event) {
-    searchTerm = event.target.value.trim().toLowerCase();
+searchInput.on("input", function () {
+    searchTerm = $(this).val().trim().toLowerCase();
     renderProducts();
 });
 
-productGrid.addEventListener("click", function (event) {
-    const card = event.target.closest(".product-card");
+productGrid.on("click", function (event) {
+    const card = $(event.target).closest(".product-card");
 
-    if (!card) {
+    if (!card.length) {
         return;
     }
 
-    const productId = Number(card.dataset.id);
+    const productId = Number(card.attr("data-id"));
     const product = products.find(function (item) {
         return item.id === productId;
     });
@@ -226,17 +224,15 @@ productGrid.addEventListener("click", function (event) {
         return;
     }
 
-    const addButton = event.target.closest(".add-to-cart-btn");
+    const addButton = $(event.target).closest(".add-to-cart-btn");
 
-    if (addButton) {
+    if (addButton.length) {
         addToCart(product);
 
-        addButton.textContent = "✓";
-        addButton.disabled = true;
+        addButton.text("✓").prop("disabled", true);
 
         setTimeout(function () {
-            addButton.textContent = "+";
-            addButton.disabled = false;
+            addButton.text("+").prop("disabled", false);
         }, 900);
 
         return;
@@ -245,16 +241,16 @@ productGrid.addEventListener("click", function (event) {
     openProductModal(product);
 });
 
-modalCloseButton.addEventListener("click", closeProductModal);
+modalCloseButton.on("click", closeProductModal);
 
-productModal.addEventListener("click", function (event) {
-    if (event.target === productModal) {
+productModal.on("click", function (event) {
+    if (event.target === productModal.get(0)) {
         closeProductModal();
     }
 });
 
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && !productModal.hidden) {
+$(document).on("keydown", function (event) {
+    if (event.key === "Escape" && !productModal.prop("hidden")) {
         closeProductModal();
     }
 });
