@@ -1,9 +1,9 @@
 var pricing = {
     coffeeBase: 10,
     addOns: {
-        Croissant: 2,
-        Brownie: 2.5,
-        Cookie: 1.5
+        Croissant: 3.2,
+        Cake: 5.5,
+        CinnamonBun: 3.8
     },
     giftFee: 3,
     frequencyMultiplier: {
@@ -19,23 +19,42 @@ var STORAGE_KEYS = {
     subscriptionBox: "subscriptionBox",
     subscriptionDraft: "subscriptionDraft"
 };
-var SUBSCRIPTION_CART_ITEM_ID = "subscription-box";
 
-var form = document.getElementById("subscriptionForm");
-var nameInput = document.getElementById("customerName");
-var emailInput = document.getElementById("customerEmail");
-var frequencyInput = document.getElementById("frequency");
-var giftInput = document.getElementById("gift");
-var addOnInputs = document.querySelectorAll(".addon");
-var message = document.getElementById("formMessage");
-var addCoffeeButton = document.getElementById("addCoffeeButton");
-var coffeeList = document.getElementById("coffeeList");
-var summaryCoffee = document.getElementById("summaryCoffee");
-var summaryAddons = document.getElementById("summaryAddons");
-var summaryFrequency = document.getElementById("summaryFrequency");
-var summaryGift = document.getElementById("summaryGift");
-var summaryPrice = document.getElementById("summaryPrice");
+var SUBSCRIPTION_CART_ITEM_ID = "subscription-box";
 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+var messageTimerId = null;
+var COFFEE_OPTIONS = ["House Blend", "Colombian Roast", "Espresso Mix"];
+var ROAST_OPTIONS = ["Light", "Medium", "Dark"];
+var GRIND_OPTIONS = ["Beans", "Coarse", "Fine"];
+
+var itemImageMap = {
+    coffees: {
+        "House Blend": "../images/Coffee beans.webp",
+        "Colombian Roast": "../images/Course Coffee.webp",
+        "Espresso Mix": "../images/Fine Coffee.png"
+    },
+    addOns: {
+        Croissant: "../images/croissant.jpg",
+        Cake: "../images/chocolatecake.jpg",
+        CinnamonBun: "../images/latte.jpg"
+    },
+    fallback: "../images/latte.jpg"
+};
+
+var $form = $("#subscriptionForm");
+var $nameInput = $("#customerName");
+var $emailInput = $("#customerEmail");
+var $frequencyInput = $("#frequency");
+var $giftInput = $("#gift");
+var $addOnInputs = $(".addon");
+var $message = $("#formMessage");
+var $addCoffeeButton = $("#addCoffeeButton");
+var $coffeeList = $("#coffeeList");
+var $summaryCoffee = $("#summaryCoffee");
+var $summaryAddons = $("#summaryAddons");
+var $summaryFrequency = $("#summaryFrequency");
+var $summaryGift = $("#summaryGift");
+var $summaryPrice = $("#summaryPrice");
 
 function readJsonFromStorage(key, fallback) {
     var value = sessionStorage.getItem(key);
@@ -97,40 +116,17 @@ function normaliseCoffeeItem(item) {
     };
 }
 
-function getLegacyCoffeeDetails(rawDraft) {
-    if (!rawDraft || typeof rawDraft !== "object") {
-        return [];
-    }
-
-    if (!Array.isArray(rawDraft.coffees)) {
-        return [];
-    }
-
-    return rawDraft.coffees.map(function (coffeeName) {
-        return normaliseCoffeeItem({
-            coffee: coffeeName,
-            roast: rawDraft.roast,
-            grind: rawDraft.grind
-        });
-    }).filter(Boolean);
-}
-
 function sanitiseDraft(rawDraft) {
     var draft;
-    var rawCoffeeDetails;
 
     if (!rawDraft || typeof rawDraft !== "object") {
         return null;
     }
 
-    rawCoffeeDetails = Array.isArray(rawDraft.coffeeDetails)
-        ? rawDraft.coffeeDetails
-        : getLegacyCoffeeDetails(rawDraft);
-
     draft = {
         name: typeof rawDraft.name === "string" ? rawDraft.name.trim() : "",
         email: typeof rawDraft.email === "string" ? rawDraft.email.trim() : "",
-        coffeeDetails: rawCoffeeDetails.map(normaliseCoffeeItem).filter(Boolean),
+        coffeeDetails: Array.isArray(rawDraft.coffeeDetails) ? rawDraft.coffeeDetails.map(normaliseCoffeeItem).filter(Boolean) : [],
         addOns: Array.isArray(rawDraft.addOns) ? rawDraft.addOns.filter(isKnownAddOn) : [],
         frequency: pricing.frequencyMultiplier[rawDraft.frequency] !== undefined ? rawDraft.frequency : "Weekly",
         gift: Boolean(rawDraft.gift),
@@ -141,20 +137,14 @@ function sanitiseDraft(rawDraft) {
 }
 
 function getOrCreateMessageElement() {
-    if (message) {
-        return message;
+    if ($message.length) {
+        return $message;
     }
 
-    message = document.createElement("div");
-    message.id = "formMessage";
-    message.setAttribute("role", "alert");
-    message.setAttribute("aria-live", "polite");
+    $message = $("<div id=\"formMessage\" role=\"alert\" aria-live=\"polite\"></div>");
+    $form.after($message);
 
-    if (form && form.parentNode) {
-        form.parentNode.insertBefore(message, form.nextSibling);
-    }
-
-    return message;
+    return $message;
 }
 
 function getCoffeeDetails() {
@@ -184,9 +174,9 @@ function getCoffeeDetails() {
 function getSelectedAddOns() {
     var selected = [];
 
-    addOnInputs.forEach(function (item) {
-        if (item.checked) {
-            selected.push(item.value);
+    $addOnInputs.each(function () {
+        if (this.checked) {
+            selected.push(this.value);
         }
     });
 
@@ -195,12 +185,12 @@ function getSelectedAddOns() {
 
 function getCurrentSubscriptionState() {
     return {
-        name: nameInput.value.trim(),
-        email: emailInput.value.trim(),
+        name: $nameInput.val().trim(),
+        email: $emailInput.val().trim(),
         coffeeDetails: getCoffeeDetails(),
         addOns: getSelectedAddOns(),
-        frequency: frequencyInput.value,
-        gift: giftInput.checked
+        frequency: $frequencyInput.val(),
+        gift: $giftInput.prop("checked")
     };
 }
 
@@ -243,9 +233,7 @@ function createSubscriptionCartItem(state, totals) {
 
 function upsertSubscriptionInCart(state, totals) {
     var cart = getCartItems();
-    var itemIndex;
-
-    itemIndex = cart.findIndex(function (item) {
+    var itemIndex = cart.findIndex(function (item) {
         return String(item.id) === SUBSCRIPTION_CART_ITEM_ID;
     });
 
@@ -290,7 +278,11 @@ function hasMeaningfulDraftData(state) {
     return false;
 }
 
-function saveDraftFromCurrentState() {
+function clearSubscriptionDraft() {
+    localStorage.removeItem(STORAGE_KEYS.subscriptionDraft);
+}
+
+function saveDraftFromCurrentState(showFeedback) {
     var state = getCurrentSubscriptionState();
 
     if (!hasMeaningfulDraftData(state)) {
@@ -299,12 +291,16 @@ function saveDraftFromCurrentState() {
     }
 
     saveSubscriptionDraft(state);
+
+    if (showFeedback) {
+        showInfo("Draft saved", 1300);
+    }
 }
 
 function restoreDraftIntoForm() {
     var rawDraft = readJsonFromStorage(STORAGE_KEYS.subscriptionDraft, null);
     var draft = sanitiseDraft(rawDraft);
-    var restoredAddOns;
+    var restoredAddOns = {};
 
     if (!draft) {
         if (rawDraft) {
@@ -314,18 +310,17 @@ function restoreDraftIntoForm() {
         return false;
     }
 
-    nameInput.value = draft.name;
-    emailInput.value = draft.email;
-    frequencyInput.value = draft.frequency;
-    giftInput.checked = draft.gift;
+    $nameInput.val(draft.name);
+    $emailInput.val(draft.email);
+    $frequencyInput.val(draft.frequency);
+    $giftInput.prop("checked", draft.gift);
 
-    restoredAddOns = {};
     draft.addOns.forEach(function (item) {
         restoredAddOns[item] = true;
     });
 
-    addOnInputs.forEach(function (item) {
-        item.checked = Boolean(restoredAddOns[item.value]);
+    $addOnInputs.each(function () {
+        this.checked = Boolean(restoredAddOns[this.value]);
     });
 
     saveCoffeeDetails(draft.coffeeDetails);
@@ -342,77 +337,174 @@ function deleteCoffee(index) {
 
     coffeeDetails.splice(index, 1);
     saveCoffeeDetails(coffeeDetails);
-    updateSummary();
-    saveDraftFromCurrentState();
+}
+
+function updateCoffeeField(index, field, value) {
+    var coffeeDetails = getCoffeeDetails();
+
+    if (!coffeeDetails[index]) {
+        return;
+    }
+
+    coffeeDetails[index][field] = value;
+    saveCoffeeDetails(coffeeDetails);
+}
+
+function createOptionsMarkup(options, selectedValue) {
+    return options.map(function (option) {
+        var isSelected = option === selectedValue ? " selected" : "";
+        return "<option value=\"" + escapeHtml(option) + "\"" + isSelected + ">" + escapeHtml(option) + "</option>";
+    }).join("");
+}
+
+function escapeHtml(text) {
+    return $("<div></div>").text(text).html();
+}
+
+function getItemImage(name, type) {
+    if (type === "coffee") {
+        return itemImageMap.coffees[name] || itemImageMap.fallback;
+    }
+
+    return itemImageMap.addOns[name] || itemImageMap.fallback;
+}
+
+function getCoffeeThumbClass(name) {
+    if (name === "House Blend") {
+        return "coffee-thumb-house";
+    }
+
+    if (name === "Colombian Roast") {
+        return "coffee-thumb-colombian";
+    }
+
+    if (name === "Espresso Mix") {
+        return "coffee-thumb-espresso";
+    }
+
+    return "";
 }
 
 function renderCoffeeList(coffeeDetails) {
-    coffeeList.innerHTML = "";
+    $coffeeList.empty();
 
     coffeeDetails.forEach(function (item, index) {
-        var coffeeBox = document.createElement("div");
-        coffeeBox.className = "coffee-box";
-        coffeeBox.innerHTML = "<p>Coffee " + (index + 1) + ": " + item.coffee + "</p><p>Roast: " + item.roast + "</p><p>Grind: " + item.grind + "</p><button type=\"button\" class=\"delete-coffee-button\" data-index=\"" + index + "\">Delete</button>";
-        coffeeList.appendChild(coffeeBox);
+        var $coffeeBox = $("<div class=\"coffee-box\"></div>").attr("data-index", index);
+        var $thumb = $("<img class=\"coffee-box-thumb\" alt=\"\">")
+            .addClass(getCoffeeThumbClass(item.coffee))
+            .attr("src", getItemImage(item.coffee, "coffee"))
+            .attr("alt", item.coffee);
+        var $details = $("<div class=\"coffee-box-main\"></div>");
+        var $remove = $("<button type=\"button\" class=\"delete-coffee-button\">Remove</button>").attr("data-index", index);
+
+        $details.append("<label>Coffee<select class=\"coffee-field-select\" data-index=\"" + index + "\" data-field=\"coffee\">" + createOptionsMarkup(COFFEE_OPTIONS, item.coffee) + "</select></label>");
+        $details.append("<label>Roast<select class=\"coffee-field-select\" data-index=\"" + index + "\" data-field=\"roast\">" + createOptionsMarkup(ROAST_OPTIONS, item.roast) + "</select></label>");
+        $details.append("<label>Grind<select class=\"coffee-field-select\" data-index=\"" + index + "\" data-field=\"grind\">" + createOptionsMarkup(GRIND_OPTIONS, item.grind) + "</select></label>");
+
+        $coffeeBox.append($thumb, $details, $remove);
+
+        $coffeeList.append($coffeeBox);
     });
 }
 
 function renderSummary(state, totals) {
-    summaryCoffee.textContent = "Coffees: " + state.coffeeDetails.length + " selected";
-    summaryAddons.textContent = "Add-ons: " + (state.addOns.join(", ") || "None");
-    summaryFrequency.textContent = "Delivery: " + state.frequency;
-    summaryGift.textContent = "Gift: " + (state.gift ? "Yes" : "No");
-    summaryPrice.textContent = "Price: " + formatPrice(totals.total);
+    var coffeePreview;
+    var addOnMarkup;
+
+    if (!state.coffeeDetails.length) {
+        coffeePreview = "None yet";
+    } else {
+        coffeePreview = state.coffeeDetails.slice(0, 2).map(function (item) {
+            return item.coffee + " (" + item.roast + "/" + item.grind + ")";
+        }).join(" | ");
+
+        if (state.coffeeDetails.length > 2) {
+            coffeePreview += " +" + (state.coffeeDetails.length - 2) + " more";
+        }
+    }
+
+    if (!state.addOns.length) {
+        addOnMarkup = "None";
+    } else {
+        addOnMarkup = state.addOns.map(function (item) {
+            return "<span class=\"summary-addon-chip\"><img src=\"" + getItemImage(item, "addon") + "\" alt=\"" + escapeHtml(item) + "\"><span>" + escapeHtml(item) + "</span></span>";
+        }).join("");
+    }
+
+    $summaryCoffee.html("<strong>Coffees:</strong> " + state.coffeeDetails.length + " selected<span class=\"summary-coffee-lines\">" + escapeHtml(coffeePreview) + "</span>");
+    $summaryAddons.html("<strong>Add-ons:</strong> " + addOnMarkup);
+    $summaryFrequency.html("<strong>Delivery:</strong> " + escapeHtml(state.frequency));
+    $summaryGift.html("<strong>Gift:</strong> " + (state.gift ? "Yes<span class=\"summary-gift-badge\">Gift box</span>" : "No"));
+    $summaryPrice.html("<strong>Price:</strong> " + formatPrice(totals.total));
 }
 
 function clearFieldErrors() {
-    nameInput.classList.remove("input-error");
-    emailInput.classList.remove("input-error");
-    nameInput.removeAttribute("aria-invalid");
-    emailInput.removeAttribute("aria-invalid");
+    $nameInput.removeClass("input-error").removeAttr("aria-invalid");
+    $emailInput.removeClass("input-error").removeAttr("aria-invalid");
 }
 
 function applyFieldErrors(errors) {
     errors.forEach(function (error) {
         if (error.field === "name") {
-            nameInput.classList.add("input-error");
-            nameInput.setAttribute("aria-invalid", "true");
+            $nameInput.addClass("input-error").attr("aria-invalid", "true");
         }
 
         if (error.field === "email") {
-            emailInput.classList.add("input-error");
-            emailInput.setAttribute("aria-invalid", "true");
+            $emailInput.addClass("input-error").attr("aria-invalid", "true");
         }
     });
 }
 
-function renderErrors(errors) {
-    var feedback = getOrCreateMessageElement();
+function showMessage(typeClass, messageText, ttl) {
+    var $feedback = getOrCreateMessageElement();
 
-    feedback.className = "form-error";
+    if (messageTimerId) {
+        clearTimeout(messageTimerId);
+        messageTimerId = null;
+    }
 
-    if (!errors.length) {
-        feedback.textContent = "";
+    if (!messageText) {
+        $feedback.removeClass("form-error form-success form-info is-visible").text("");
         return;
     }
 
-    feedback.innerHTML = errors.map(function (error) {
-        return "<p>" + error.message + "</p>";
+    $feedback.removeClass("form-error form-success form-info").addClass(typeClass).text(messageText).addClass("is-visible");
+
+    if (ttl) {
+        messageTimerId = setTimeout(function () {
+            $feedback.removeClass("is-visible");
+            messageTimerId = null;
+        }, ttl);
+    }
+}
+
+function renderErrors(errors) {
+    var $feedback = getOrCreateMessageElement();
+    var markup;
+
+    if (!errors.length) {
+        showMessage("", "");
+        return;
+    }
+
+    markup = errors.map(function (error) {
+        return "<p>" + escapeHtml(error.message) + "</p>";
     }).join("");
+
+    if (messageTimerId) {
+        clearTimeout(messageTimerId);
+        messageTimerId = null;
+    }
+
+    $feedback.removeClass("form-success form-info").addClass("form-error is-visible").html(markup);
 }
 
 function showSuccess(messageText) {
-    var feedback = getOrCreateMessageElement();
-
-    feedback.className = "form-success";
-    feedback.textContent = messageText;
+    showMessage("form-success", messageText, 2200);
 }
 
-function showInfo(messageText) {
-    var feedback = getOrCreateMessageElement();
-
-    feedback.className = "form-info";
-    feedback.textContent = messageText;
+function showInfo(messageText, ttl) {
+    showMessage("form-info", messageText, ttl || 1500);
 }
 
 function focusFirstInvalidField(errors) {
@@ -421,17 +513,17 @@ function focusFirstInvalidField(errors) {
     }
 
     if (errors[0].field === "name") {
-        nameInput.focus();
+        $nameInput.trigger("focus");
         return;
     }
 
     if (errors[0].field === "email") {
-        emailInput.focus();
+        $emailInput.trigger("focus");
         return;
     }
 
     if (errors[0].field === "coffee") {
-        addCoffeeButton.focus();
+        $addCoffeeButton.trigger("focus");
     }
 }
 
@@ -493,37 +585,122 @@ function validateForm() {
     return errors;
 }
 
-form.addEventListener("input", function () {
-    var errors;
-
-    updateSummary();
-    saveDraftFromCurrentState();
+function updateValidationStateWhileEditing() {
+    var errors = validateForm();
 
     clearFieldErrors();
-    errors = validateForm();
 
     if (errors.length) {
         applyFieldErrors(errors);
-    } else if (message) {
-        message.textContent = "";
-        message.className = "";
     }
-});
-window.addEventListener("pageshow", function () {
+
+    if (!errors.length && $message.hasClass("form-error")) {
+        showMessage("", "");
+    }
+}
+
+function setupSubscriptionCarousel() {
+    var $carousel = $(".subscription-carousel");
+    var $slides = $carousel.find(".carousel-slide");
+    var $dots = $carousel.find(".carousel-dot");
+    var slideCount = $slides.length;
+    var activeSlide = 0;
+
+    function showSlide(index) {
+        var safeIndex;
+
+        if (!slideCount) {
+            return;
+        }
+
+        safeIndex = ((index % slideCount) + slideCount) % slideCount;
+        activeSlide = safeIndex;
+
+        $slides.removeClass("is-active").eq(safeIndex).addClass("is-active");
+        $dots.removeClass("is-active").eq(safeIndex).addClass("is-active");
+    }
+
+    function moveSlide(step) {
+        showSlide(activeSlide + step);
+    }
+
+    if (!$carousel.length || slideCount <= 1) {
+        return;
+    }
+
+    $carousel.on("click", ".carousel-button-prev", function () {
+        moveSlide(-1);
+    });
+
+    $carousel.on("click", ".carousel-button-next", function () {
+        moveSlide(1);
+    });
+
+    $carousel.on("click", ".carousel-dot", function () {
+        var selected = Number($(this).attr("data-slide"));
+
+        if (Number.isNaN(selected)) {
+            return;
+        }
+
+        showSlide(selected);
+    });
+
+    showSlide(0);
+}
+
+$form.on("input change", function (event) {
+    if ($(event.target).hasClass("coffee-field-select")) {
+        return;
+    }
+
     updateSummary();
-    saveDraftFromCurrentState();
-});
-addCoffeeButton.addEventListener("click", function () {
-    saveDraftFromCurrentState();
-    window.location.href = "coffee-details.html";
-});
-coffeeList.addEventListener("click", function (event) {
-    if (event.target.classList.contains("delete-coffee-button")) {
-        deleteCoffee(Number(event.target.dataset.index));
-    }
+    saveDraftFromCurrentState(false);
+    updateValidationStateWhileEditing();
 });
 
-form.addEventListener("submit", function (event) {
+$(window).on("pageshow", function () {
+    updateSummary();
+    saveDraftFromCurrentState(false);
+});
+
+$addCoffeeButton.on("click", function () {
+    var coffeeDetails = getCoffeeDetails();
+
+    coffeeDetails.push({
+        coffee: COFFEE_OPTIONS[0],
+        roast: ROAST_OPTIONS[1],
+        grind: GRIND_OPTIONS[0]
+    });
+
+    saveCoffeeDetails(coffeeDetails);
+    updateSummary();
+    saveDraftFromCurrentState(false);
+});
+
+$coffeeList.on("change", ".coffee-field-select", function () {
+    var index = Number($(this).attr("data-index"));
+    var field = $(this).attr("data-field");
+    var value = $(this).val();
+
+    if (Number.isNaN(index) || !field) {
+        return;
+    }
+
+    updateCoffeeField(index, field, value);
+    updateSummary();
+    saveDraftFromCurrentState(false);
+});
+
+$coffeeList.on("click", ".delete-coffee-button", function () {
+    var index = Number($(this).attr("data-index"));
+
+    deleteCoffee(index);
+    updateSummary();
+    saveDraftFromCurrentState(false);
+});
+
+$form.on("submit", function (event) {
     var errors = validateForm();
     var state = getCurrentSubscriptionState();
     var totals = calculateSubscriptionTotal(state);
@@ -541,11 +718,12 @@ form.addEventListener("submit", function (event) {
     writeJsonToStorage(STORAGE_KEYS.subscriptionBox, state);
     upsertSubscriptionInCart(state, totals);
     clearSubscriptionDraft();
-    showSuccess("Subscription saved and added to cart");
+    showSuccess("Saved to cart");
 });
 
 if (restoreDraftIntoForm()) {
-    showInfo("Draft restored from your last visit.");
+    showInfo("Draft restored from your last visit.", 1700);
 }
 
+setupSubscriptionCarousel();
 updateSummary();
