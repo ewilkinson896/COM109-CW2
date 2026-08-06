@@ -1,0 +1,9 @@
+Lighthouse Accessibility Scores
+===============================
+index.html: 95
+pages/cart.html: 100
+pages/information.html: 98
+pages/product.html: 98
+pages/subscription.html: 100
+-------------------------------
+Average: 98.2

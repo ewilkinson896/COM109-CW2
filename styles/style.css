@@ -1250,7 +1250,7 @@ footer {
 
 .contact-card h4 {
 	margin-bottom: 6px;
-	color: var(--accent);
+	color: var(--primary);
 	font-size: 1rem;
 	text-transform: uppercase;
 	letter-spacing: 0.06em;
