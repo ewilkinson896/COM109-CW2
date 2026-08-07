@@ -9,13 +9,15 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
     <nav>
         <span class="brand">York Street Coffee</span>
         <div class="nav-links">
             <a href="../index.html">Home</a>
             <a href="product.html">Products</a>
             <a href="information.html">Information</a>
-            <a href="subscription.html" class="current">Subscription</a>
+            <a href="subscription.html" class="current" aria-current="page">Subscription</a>
             <a href="cart.html" class="nav-cart-link"><img src="../images/Cart-icon.png" alt="Cart" class="nav-cart-icon"></a>
         </div>
     </nav>
@@ -52,7 +54,7 @@
         </div>
     </section>
 
-    <main class="subscription-page">
+    <main id="main-content" class="subscription-page" tabindex="-1">
         <h1>Build Your Subscription Box</h1>
         <p class="page-intro">Set up a coffee subscription that matches your taste, perfectly.</p>
 
@@ -107,7 +109,7 @@
             <button type="submit">Save Subscription</button>
         </form>
 
-        <div id="formMessage"></div>
+        <div id="formMessage" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
 
         <section class="summary-box">
             <h2>Order Summary</h2>

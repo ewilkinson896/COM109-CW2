@@ -35,7 +35,35 @@ $(function () {
             return;
         }
 
-        formErrorsEl.prop("hidden", false).html(errors.map((error) => `<p>${error}</p>`).join(""));
+        formErrorsEl.prop("hidden", false).html(errors.map((error) => `<p>${error.message}</p>`).join(""));
+        formErrorsEl.trigger("focus");
+    }
+
+    function clearFieldValidation() {
+        checkoutForm.find(".form-input").each((_, input) => {
+            const $input = $(input);
+            $input.removeAttr("aria-invalid");
+            $input.removeAttr("aria-describedby");
+        });
+
+        checkoutForm.find(".field-error").remove();
+    }
+
+    function setFieldValidation(fieldName, message) {
+        const input = checkoutForm.find(`[name="${fieldName}"]`);
+
+        if (!input.length) {
+            return;
+        }
+
+        const fieldId = input.attr("id") || fieldName;
+        const errorId = `${fieldId}-error`;
+
+        input.attr("aria-invalid", "true");
+        input.attr("aria-describedby", errorId);
+
+        $("#" + errorId).remove();
+        input.after(`<p id="${errorId}" class="field-error">${message}</p>`);
     }
 
     function renderCart() {
@@ -122,33 +150,51 @@ $(function () {
         $.each(requiredFields, (_, field) => {
             const value = formData.get(field.name);
             if (!value || value.trim() === "") {
-                errors.push(`${field.label} is required.`);
+                errors.push({
+                    field: field.name,
+                    message: `${field.label} is required.`
+                });
             }
         });
 
         const email = formData.get("email");
         if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            errors.push("Enter a valid email address.");
+            errors.push({
+                field: "email",
+                message: "Enter a valid email address."
+            });
         }
 
         const firstName = formData.get("firstName");
         if (firstName && /\d/.test(firstName)) {
-            errors.push("First name must not contain numbers.");
+            errors.push({
+                field: "firstName",
+                message: "First name must not contain numbers."
+            });
         }
 
         const lastName = formData.get("lastName");
         if (lastName && /\d/.test(lastName)) {
-            errors.push("Last name must not contain numbers.");
+            errors.push({
+                field: "lastName",
+                message: "Last name must not contain numbers."
+            });
         }
 
         const cardNumber = formData.get("cardNumber").replace(/\s+/g, "");
         if (cardNumber && !/^\d{16}$/.test(cardNumber)) {
-            errors.push("Card number must be 16 digits.");
+            errors.push({
+                field: "cardNumber",
+                message: "Card number must be 16 digits."
+            });
         }
 
         const expiry = formData.get("expiry");
         if (expiry && !/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
-            errors.push("Expiry date must use MM/YY format.");
+            errors.push({
+                field: "expiry",
+                message: "Expiry date must use MM/YY format."
+            });
         } else if (expiry) {
             const [month, year] = expiry.split("/").map((value) => Number(value));
             const currentDate = new Date();
@@ -156,13 +202,19 @@ $(function () {
             const currentMonth = currentDate.getMonth() + 1;
 
             if (year < currentYear || (year === currentYear && month < currentMonth)) {
-                errors.push("Card expiry date must be in the future.");
+                errors.push({
+                    field: "expiry",
+                    message: "Card expiry date must be in the future."
+                });
             }
         }
 
         const cvv = formData.get("cvv");
         if (cvv && !/^\d{3}$/.test(cvv)) {
-            errors.push("CVV must be 3 digits.");
+            errors.push({
+                field: "cvv",
+                message: "CVV must be 3 digits."
+            });
         }
 
         return errors;
@@ -193,10 +245,11 @@ $(function () {
 
     checkoutForm.on("submit", (event) => {
         event.preventDefault();
+        clearFieldValidation();
 
         const cart = getCart();
         if (!cart.length) {
-            showFormErrors(["Your cart is empty. Add an item before checking out."]);
+            showFormErrors([{ message: "Your cart is empty. Add an item before checking out." }]);
             return;
         }
 
@@ -206,6 +259,17 @@ $(function () {
 
         showFormErrors(errors);
         if (errors.length) {
+            const seenFields = new Set();
+
+            errors.forEach((error) => {
+                if (!error.field || seenFields.has(error.field)) {
+                    return;
+                }
+
+                setFieldValidation(error.field, error.message);
+                seenFields.add(error.field);
+            });
+
             return;
         }
 

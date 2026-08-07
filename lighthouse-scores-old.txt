@@ -1,0 +1,9 @@
+Lighthouse Accessibility Scores (Old Baseline: dacb738)
+=======================================================
+index.html: 95
+pages/cart.html: 86
+pages/information.html: 98
+pages/product.html: 98
+pages/subscription.html: 95
+-------------------------------------------------------
+Average: 94.4

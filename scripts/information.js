@@ -1,5 +1,6 @@
 // Javascript for information page
 
 document.getElementById("topBtn").addEventListener("click", function () {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
 });

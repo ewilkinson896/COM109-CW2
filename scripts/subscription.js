@@ -138,10 +138,11 @@ function sanitiseDraft(rawDraft) {
 
 function getOrCreateMessageElement() {
     if ($message.length) {
+        $message.attr("role", "status").attr("aria-live", "polite").attr("aria-atomic", "true");
         return $message;
     }
 
-    $message = $("<div id=\"formMessage\" role=\"alert\" aria-live=\"polite\"></div>");
+    $message = $("<div id=\"formMessage\" role=\"status\" aria-live=\"polite\" aria-atomic=\"true\" tabindex=\"-1\"></div>");
     $form.after($message);
 
     return $message;
@@ -453,18 +454,36 @@ function renderSummary(state, totals) {
 }
 
 function clearFieldErrors() {
-    $nameInput.removeClass("input-error").removeAttr("aria-invalid");
-    $emailInput.removeClass("input-error").removeAttr("aria-invalid");
+    $nameInput.removeClass("input-error").removeAttr("aria-invalid aria-describedby");
+    $emailInput.removeClass("input-error").removeAttr("aria-invalid aria-describedby");
+    $addCoffeeButton.removeAttr("aria-invalid aria-describedby");
+    $("#customerName-error").remove();
+    $("#customerEmail-error").remove();
+    $("#coffeeList-error").remove();
+}
+
+function setFieldError($field, errorId, message) {
+    $field.attr("aria-invalid", "true").attr("aria-describedby", errorId);
+
+    $("#" + errorId).remove();
+
+    $field.after("<p id=\"" + errorId + "\" class=\"field-error\">" + escapeHtml(message) + "</p>");
 }
 
 function applyFieldErrors(errors) {
     errors.forEach(function (error) {
         if (error.field === "name") {
-            $nameInput.addClass("input-error").attr("aria-invalid", "true");
+            $nameInput.addClass("input-error");
+            setFieldError($nameInput, "customerName-error", error.message);
         }
 
         if (error.field === "email") {
-            $emailInput.addClass("input-error").attr("aria-invalid", "true");
+            $emailInput.addClass("input-error");
+            setFieldError($emailInput, "customerEmail-error", error.message);
+        }
+
+        if (error.field === "coffee") {
+            setFieldError($addCoffeeButton, "coffeeList-error", error.message);
         }
     });
 }
@@ -479,9 +498,12 @@ function showMessage(typeClass, messageText, ttl) {
 
     if (!messageText) {
         $feedback.removeClass("form-error form-success form-info is-visible").text("");
+        $feedback.attr("role", "status").attr("aria-live", "polite");
         return;
     }
 
+    $feedback.attr("role", typeClass === "form-error" ? "alert" : "status");
+    $feedback.attr("aria-live", typeClass === "form-error" ? "assertive" : "polite");
     $feedback.removeClass("form-error form-success form-info").addClass(typeClass).text(messageText).addClass("is-visible");
 
     if (ttl) {
@@ -510,7 +532,9 @@ function renderErrors(errors) {
         messageTimerId = null;
     }
 
+    $feedback.attr("role", "alert").attr("aria-live", "assertive");
     $feedback.removeClass("form-success form-info").addClass("form-error is-visible").html(markup);
+    $feedback.trigger("focus");
 }
 
 function showSuccess(messageText) {
@@ -725,7 +749,6 @@ $form.on("submit", function (event) {
     if (errors.length) {
         renderErrors(errors);
         applyFieldErrors(errors);
-        focusFirstInvalidField(errors);
         return;
     }
 

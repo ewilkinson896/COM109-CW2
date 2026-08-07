@@ -41,6 +41,24 @@ a {
 	color: var(--accent);
 }
 
+.skip-link {
+	position: absolute;
+	left: 12px;
+	top: -48px;
+	z-index: 1000;
+	background-color: #ffffff;
+	color: var(--primary);
+	border: 2px solid var(--accent);
+	padding: 8px 12px;
+	text-decoration: none;
+	font-weight: 700;
+	border-radius: 6px;
+}
+
+.skip-link:focus {
+	top: 12px;
+}
+
 /* ===================== Navigation ===================== */
 nav {
 	display: flex;
@@ -110,6 +128,8 @@ nav a.current {
 	.home-logo + nav .brand {
 		visibility: hidden;
 	}
+}
+
 .nav-cart-link {
 	display: inline-flex;
 	align-items: center;
@@ -236,6 +256,14 @@ main section ul li::before {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.view-details-btn {
+	position: absolute;
+	left: 10px;
+	bottom: 10px;
+	padding: 7px 10px;
+	font-size: 0.86rem;
 }
 
 .add-to-cart-btn:disabled {
@@ -619,15 +647,28 @@ label {
 }
 
 .carousel-dot {
+	position: relative;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border-radius: 50%;
+	border: none;
+	background-color: transparent;
+}
+
+.carousel-dot::before {
+	content: "";
+	position: absolute;
 	width: 10px;
 	height: 10px;
-	padding: 0;
+	top: 7px;
+	left: 7px;
 	border-radius: 50%;
 	border: 1px solid #fff;
 	background-color: rgba(255, 255, 255, 0.45);
 }
 
-.carousel-dot.is-active {
+.carousel-dot.is-active::before {
 	background-color: #fff;
 }
 
@@ -945,7 +986,21 @@ label {
 
 .visually-hidden {
 	position: absolute;
-	left: -9999px;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	clip-path: inset(50%);
+	border: 0;
+	white-space: nowrap;
+}
+
+.field-error {
+	margin-top: 4px;
+	font-size: 0.85rem;
+	color: var(--danger);
 }
 
 /* ===================== Cart & Checkout ===================== */
@@ -1195,7 +1250,7 @@ footer {
 
 .contact-card h4 {
 	margin-bottom: 6px;
-	color: var(--accent);
+	color: var(--primary);
 	font-size: 1rem;
 	text-transform: uppercase;
 	letter-spacing: 0.06em;
@@ -1229,4 +1284,17 @@ footer {
 		width: 100%;
 	}
 }
+
+@media (prefers-reduced-motion: reduce) {
+	html:focus-within {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+	}
 }
